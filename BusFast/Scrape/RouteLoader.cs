@@ -45,6 +45,7 @@ namespace BusFast.Scrape
 
         private IEnumerable<Service> LoadServices(HtmlNode n)
         {
+            var stops = n.SelectNodes("table[@class='headers']/tbody/tr/comment()[1]").Select(n => n.InnerHtml).Select(s => int.Parse(new string(s.Where(c => char.IsDigit(c)).ToArray()))).ToArray();
             throw new NotImplementedException();
         }
     }
