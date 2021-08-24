@@ -7,7 +7,7 @@ namespace BusFast.Models
 {
     public enum DaysCode
     {
-        MondayToFriday,
+        Friday,
         Saturday,
         Sunday
     }

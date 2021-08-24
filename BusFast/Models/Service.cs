@@ -8,6 +8,6 @@ namespace BusFast.Models
     public class Service
     {
         public DaysCode Days { get; set; }
-        public ServiceStop[] Stops { get; set; }
+        public List<ServiceStop> Stops { get; set; }
     }
 }
