@@ -7,7 +7,7 @@ namespace BusFast.Models
 {
     public class ServiceStop
     {
-        public int StopId { get; set; }
+        public Stop Stop { get; set; }
         public TimeSpan Time { get; set; }
     }
 }

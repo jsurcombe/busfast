@@ -3,11 +3,26 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>BusFast</AssemblyName>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="src\api.ts" />
+    <None Remove="src\http-common.ts" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.11.36" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="src\api.ts" />
+    <TypeScriptCompile Include="src\http-common.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\Stops\" />
   </ItemGroup>
 
 </Project>
