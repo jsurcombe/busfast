@@ -7,7 +7,13 @@ namespace BusFast.Models
 {
     public class Service
     {
+        public Service(Route route)
+        {
+            Route = route;
+        }
+
         public DaysCode Days { get; set; }
         public List<ServiceStop> Stops { get; set; }
+        public Route Route { get; }
     }
 }

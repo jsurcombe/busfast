@@ -1,36 +1,43 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <div id="nav">
+        <router-link to="/">Home</router-link>
+    </div>
+    <router-view />
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import HelloWorld from './components/HelloWorld.vue';
 
-@Options({
-  components: {
-    HelloWorld,
-  },
-})
-export default class App extends Vue {}
 </script>
 
 <style>
 
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
     body {
-        background: black;
+        background: black
+    }
+
+    #app {
+        font-family: System, monospace;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-align: center;
         color: white;
-        font-family: System, monospace;
     }
 
-    input {
-        font-family: System, monospace;
+    #nav {
+        padding: 30px;
     }
 
-#app {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  margin-top: 60px;
-}
+        #nav a {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+            #nav a.router-link-exact-active {
+                color: #42b983;
+            }
 </style>

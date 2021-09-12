@@ -42,12 +42,12 @@ namespace BusFast.Scrape
 
             var res = new Route();
             res.Name = route;
-            res.Services = document.DocumentNode.SelectNodes("//div[@class='t-table']").SelectMany(n => LoadServices(n)).ToArray();
+            res.Services = document.DocumentNode.SelectNodes("//div[@class='t-table']").SelectMany(n => LoadServices(res, n)).ToArray();
 
             return res;
         }
 
-        private Service[] LoadServices(HtmlNode n)
+        private Service[] LoadServices(Route route, HtmlNode n)
         {
             var stops = n.SelectNodes("table[@class='headers']/tbody/tr").Select(n => LoadStop(n)).ToArray();
 
@@ -62,7 +62,7 @@ namespace BusFast.Scrape
 
             var serviceCount = stopServiceSets[0].SelectNodes("td").Where(n => !n.HasClass("StopHeader") && !n.HasClass("end-row")).Count();
 
-            var services = Enumerable.Range(0, serviceCount).Select(i => new Service() { Days = daysCode, Stops = new List<ServiceStop>() }).ToArray();
+            var services = Enumerable.Range(0, serviceCount).Select(i => new Service(route) { Days = daysCode, Stops = new List<ServiceStop>() }).ToArray();
 
             for (int i = 0; i < stops.Length; i++)
             {
@@ -72,7 +72,8 @@ namespace BusFast.Scrape
                     var t = srcServices[j].InnerText;
                     if (t != " - ")
                     {
-                        services[j].Stops.Add(new ServiceStop() { Stop = stops[i], Time = TimeSpan.Parse(t) });
+                        var service = services[j];
+                        service.Stops.Add(new ServiceStop(service) { Stop = stops[i], Time = TimeSpan.Parse(t) });
                     }
                 }
             }

@@ -1,4 +1,5 @@
-﻿using BusFast.Models;
+﻿using BusFast.Data;
+using BusFast.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,16 @@ namespace BusFast.Controllers
                 return new Stop[] { };
             else
                 return _ds.Stops.Where(si => si.Name.Contains(q, StringComparison.CurrentCultureIgnoreCase)).Take(10).ToArray();
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public StopView View(int id)
+        {
+            var stop = _ds.GetStop(id);
+
+            var res = new StopView() { Name = stop.Name };
+            return res;
         }
     }
 }

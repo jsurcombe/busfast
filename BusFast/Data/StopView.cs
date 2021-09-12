@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BusFast.Models
+namespace BusFast.Data
 {
-    public enum DaysCode
+    public class StopView
     {
-        Friday = 5,
-        Saturday = 6,
-        Sunday = 0
+        public string Name { get; set; }
     }
 }
