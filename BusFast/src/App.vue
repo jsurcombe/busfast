@@ -20,6 +20,10 @@
         background: black
     }
 
+    input {
+        font-family: System, monospace;
+    }
+
     #app {
         font-family: System, monospace;
         -webkit-font-smoothing: antialiased;
