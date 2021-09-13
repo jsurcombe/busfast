@@ -2,3 +2,5 @@
 /BusFast/bin
 /BusFast/BusFast.csproj.user
 /.vs
+/BusFast/publish/gilligan
+*.user

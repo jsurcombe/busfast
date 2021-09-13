@@ -3,7 +3,7 @@
         <img alt="Vue logo" src="../assets/logo.png">
 
         <h1>BUS>>FAST</h1>
-        <input v-model="stopQ" v-on:keyup="changedQ()" placeholder="find a stop">
+        <input v-model="stopQ" @input="changedQ($event.target.value)" placeholder="find a stop">
         <ul>
             <li v-for="stop in stops" :key="stop.id">
                 <router-link :to="{ name: 'Stop', params: { id: stop.id }}">{{ stop.name }}</router-link>
@@ -27,7 +27,8 @@
 
         stops: Stop[] | null = null;
 
-        changedQ() {
+        changedQ(q: string) {
+            this.stopQ = q;
             this.$router.push(`/?q=${this.stopQ}`);
             this.getStops();
         }
