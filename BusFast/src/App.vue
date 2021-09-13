@@ -16,32 +16,43 @@
         padding: 0;
     }
 
+    li {
+        line-height: 1.5em;
+    }
+
     body {
-        background: black
+        font-size: 1.2em;
+        background: black;
     }
 
     input {
-        font-family: System, monospace;
+        font-size: 1.2em;
+        font-family: monospace;
+        text-align: center;
     }
 
     #app {
-        font-family: System, monospace;
+        font-family: monospace;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: white;
     }
 
+
+    a {
+        color: #42b983;
+    }
+
     #nav {
         padding: 30px;
     }
 
-        #nav a {
-            font-weight: bold;
-            color: #2c3e50;
-        }
+    #nav a {
+        color: #2c3e50;
+    }
 
-            #nav a.router-link-exact-active {
-                color: #42b983;
-            }
+    #nav a .router-link-exact-active {
+        color: #42b983;
+    }
 </style>

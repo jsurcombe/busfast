@@ -7,7 +7,7 @@ namespace BusFast.Data
 {
     public class ServiceUpcoming
     {
-        public RouteItem Route { get; set; }
-        public DateTime At { get;  set; }
+        public ServiceItem Service { get; set; }
+        public DateTime At { get; set; }
     }
 }

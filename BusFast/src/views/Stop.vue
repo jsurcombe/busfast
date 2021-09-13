@@ -8,8 +8,8 @@
 
     <div v-if="upcomingServices">
         <ul>
-            <li v-for="(service, index) in upcomingServices" :key="index">
-                {{ timePart(service.at) }} {{service.route.name}}
+            <li v-for="(ss, index) in upcomingServices" :key="index">
+                <router-link :to="{ name: 'Service', params: { id: ss.service.id }, query: { stopId: $route.params.id }}">{{ timePart(ss.at) }} {{ss.service.routeName}}</router-link>
             </li>
         </ul>
     </div>
@@ -17,7 +17,7 @@
 
 <script lang="ts">
     import { Options, Vue } from 'vue-class-component';
-    import Api, { StopView, ServiceUpcoming } from '@/api';
+    import Api, { StopItem, ServiceUpcoming } from '@/api';
 
     @Options({
         props: {
@@ -26,7 +26,7 @@
     })
     export default class StopViewPage extends Vue {
 
-        stop: StopView | null = null;
+        stop: StopItem | null = null;
         upcomingServices: ServiceUpcoming[] | null = null;
 
         mounted() {
@@ -44,7 +44,7 @@
         }
 
         timePart(dt: string): string {
-            return dt.substring(11, 16);
+            return dt.substr(11, 5);
         }
     }
 </script>

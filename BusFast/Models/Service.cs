@@ -15,5 +15,6 @@ namespace BusFast.Models
         public DaysCode Days { get; set; }
         public List<ServiceStop> Stops { get; set; }
         public Route Route { get; }
+        public string Id { get; set; }
     }
 }

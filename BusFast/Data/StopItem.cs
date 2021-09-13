@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace BusFast.Data
 {
-    public class RouteItem
+    public class StopItem
     {
-        public RouteItem(Route route)
+        public StopItem(Stop stop)
         {
-            this.Name = route.Name;
+            Id = stop.Id;
+            Name = stop.Name;
         }
 
+        public int Id { get; }
         public string Name { get; }
     }
 }

@@ -64,6 +64,14 @@ namespace BusFast.Scrape
 
             var services = Enumerable.Range(0, serviceCount).Select(i => new Service(route) { Days = daysCode, Stops = new List<ServiceStop>() }).ToArray();
 
+            var firstCells = stopServiceSets[0].SelectNodes("td").Where(n => !n.HasClass("StopHeader") && !n.HasClass("end-row")).ToArray();
+
+            for (int j = 0; j < serviceCount; j++)
+            {
+                var t = firstCells[j].Attributes["data"].Value;
+                services[j].Id = t.Substring(0, t.IndexOf('@'));
+            }
+
             for (int i = 0; i < stops.Length; i++)
             {
                 var srcServices = stopServiceSets[i].SelectNodes("td").Where(n => !n.HasClass("StopHeader") && !n.HasClass("end-row")).ToArray();

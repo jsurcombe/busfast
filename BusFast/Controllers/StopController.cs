@@ -20,22 +20,16 @@ namespace BusFast.Controllers
         }
 
         [HttpGet]
-        public Stop[] Search(string q)
+        public StopItem[] Search(string q)
         {
             if (string.IsNullOrEmpty(q))
-                return new Stop[] { };
+                return new StopItem[] { };
             else
-                return _ds.Stops.Where(si => si.Name.Contains(q, StringComparison.CurrentCultureIgnoreCase)).Take(10).ToArray();
+                return _ds.Stops.Where(si => si.Name.Contains(q, StringComparison.CurrentCultureIgnoreCase)).Take(10).Select(s => new StopItem(s)).ToArray();
         }
 
         [HttpGet]
         [Route("{id}")]
-        public StopView View(int id)
-        {
-            var stop = _ds.GetStop(id);
-
-            var res = new StopView() { Name = stop.Name };
-            return res;
-        }
+        public StopItem View(int id) => new StopItem( _ds.GetStop(id));
     }
 }

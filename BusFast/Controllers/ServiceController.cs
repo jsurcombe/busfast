@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Priority_Queue;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using TimeZoneConverter;
 
 namespace BusFast.Controllers
 {
@@ -20,14 +22,27 @@ namespace BusFast.Controllers
         }
 
         [HttpGet]
+        [Route("{id}")]
+        public ServiceItem View(string id)
+        {
+            return new ServiceItem(_ds.GetService(id));
+        }
+
+        [HttpGet]
+        [Route("{id}/stops")]
+        public ServiceStopItem[] Stops(string id)
+        {
+            return _ds.GetService(id).Stops.Select(ss => new ServiceStopItem(ss)).ToArray();
+        }
+
+        [HttpGet]
         [Route("upcoming")]
         public ServiceUpcoming[] Upcoming(int stopId)
         {
             var services = _ds.GetServicesAt(stopId);
 
             var iterators = new SimplePriorityQueue<IEnumerator<ServiceStopHelper.Occurrence>>();
-
-            var now = DateTime.Now;
+            var now = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TZConvert.GetTimeZoneInfo("Europe/London"));
 
             foreach (var s in services)
             {
@@ -44,7 +59,11 @@ namespace BusFast.Controllers
             {
                 var n = iterators.Dequeue();
 
-                res.Add(new ServiceUpcoming() { Route = new RouteItem(n.Current.ServiceStop.Service.Route), At = n.Current.At });
+                res.Add(new ServiceUpcoming()
+                {
+                    Service = new ServiceItem(n.Current.ServiceStop.Service),
+                    At = n.Current.At
+                });
 
                 n.MoveNext();
                 iterators.Enqueue(n, (float)(n.Current.At - DateTime.Now).TotalDays);

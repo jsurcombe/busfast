@@ -1,7 +1,5 @@
 <template>
-    <div class="home">
-        <img alt="Vue logo" src="../assets/logo.png">
-
+    <div>
         <h1>BUS>>FAST</h1>
         <input v-model="stopQ" @input="changedQ($event.target.value)" placeholder="find a stop">
         <ul>
@@ -14,7 +12,7 @@
 
 <script lang="ts">
     import { Options, Vue } from 'vue-class-component';
-    import Api, { Stop } from '@/api';
+    import Api, { StopItem } from '@/api';
 
     @Options({
         props: {
@@ -25,7 +23,7 @@
 
         stopQ: string = '';
 
-        stops: Stop[] | null = null;
+        stops: StopItem[] | null = null;
 
         changedQ(q: string) {
             this.stopQ = q;
@@ -48,14 +46,3 @@
         }
     }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-    h3 {
-        margin: 40px 0 0;
-    }
-
-    a {
-        color: #42b983;
-    }
-</style>
