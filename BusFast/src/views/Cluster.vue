@@ -2,14 +2,14 @@
     <h1>
         BUS>>STOP
     </h1>
-    <div v-if="stop">
-        {{ stop.name }}
+    <div v-if="cluster">
+        {{ cluster.name }}
     </div>
 
     <div v-if="upcomingServices">
         <ul>
             <li v-for="(ss, index) in upcomingServices" :key="index">
-                <router-link :to="{ name: 'Service', params: { id: ss.service.id }, query: { stopId: $route.params.id }}">{{ timePart(ss.at) }} {{ss.service.routeName}}</router-link>
+                <router-link :to="{ name: 'Service', params: { id: ss.service.id }, query: { clusterId: $route.params.id }}">{{ timePart(ss.at) }} #{{ss.service.route.name}}: {{ss.service.route.description}}</router-link>
             </li>
         </ul>
     </div>
@@ -17,24 +17,24 @@
 
 <script lang="ts">
     import { Options, Vue } from 'vue-class-component';
-    import Api, { StopItem, ServiceUpcoming } from '@/api';
+    import Api, { ClusterItem, ServiceUpcoming } from '@/api';
 
     @Options({
         props: {
             msg: String
         }
     })
-    export default class StopViewPage extends Vue {
+    export default class ClusterViewPage extends Vue {
 
-        stop: StopItem | null = null;
+        cluster: ClusterItem | null = null;
         upcomingServices: ServiceUpcoming[] | null = null;
 
         mounted() {
-            const id = +this.$route.params.id;
+            const id = this.$route.params.id as string;
 
-            Api.getStop(id)
+            Api.getCluster(id)
                 .then(response => {
-                    this.stop = response.data;
+                    this.cluster = response.data;
                 });
 
             Api.getUpcomingServices(id)

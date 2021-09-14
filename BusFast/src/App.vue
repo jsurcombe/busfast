@@ -20,6 +20,16 @@
         line-height: 1.5em;
     }
 
+        li.highlight {
+            font-weight: bold;
+            background-color: #42b983;
+            color: black;
+        }
+
+        li.highlight a {
+            color: black;
+        }
+
     body {
         font-size: 1.2em;
         background: black;
@@ -48,11 +58,11 @@
         padding: 30px;
     }
 
-    #nav a {
-        color: #2c3e50;
-    }
+        #nav a {
+            color: #2c3e50;
+        }
 
-    #nav a .router-link-exact-active {
-        color: #42b983;
-    }
+            #nav a .router-link-exact-active {
+                color: #42b983;
+            }
 </style>

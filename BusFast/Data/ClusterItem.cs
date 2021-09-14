@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace BusFast.Data
 {
-    public class ServiceItem
+    public class ClusterItem
     {
-        public ServiceItem(Service service)
+        public ClusterItem(Cluster c)
         {
-            Id = service.Id;
-            Route = new RouteItem(service.Route);
+            Id = c.Id;
+            Name = c.Name;
         }
 
         public string Id { get; }
-        public RouteItem Route { get; set; }
+        public string Name { get; }
     }
 }

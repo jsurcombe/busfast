@@ -4,7 +4,7 @@
         <input v-model="stopQ" @input="changedQ($event.target.value)" placeholder="find a stop">
         <ul>
             <li v-for="stop in stops" :key="stop.id">
-                <router-link :to="{ name: 'Stop', params: { id: stop.id }}">{{ stop.name }}</router-link>
+                <router-link :to="{ name: 'Cluster', params: { id: stop.id }}">{{ stop.name }}</router-link>
             </li>
         </ul>
     </div>
@@ -12,7 +12,7 @@
 
 <script lang="ts">
     import { Options, Vue } from 'vue-class-component';
-    import Api, { StopItem } from '@/api';
+    import Api, { ClusterItem } from '@/api';
 
     @Options({
         props: {
@@ -23,7 +23,7 @@
 
         stopQ: string = '';
 
-        stops: StopItem[] | null = null;
+        stops: ClusterItem[] | null = null;
 
         changedQ(q: string) {
             this.stopQ = q;

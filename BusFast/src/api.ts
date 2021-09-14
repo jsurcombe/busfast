@@ -3,16 +3,16 @@ import { AxiosResponse } from "axios";
 
 class Api {
 
-  getStops(q: string): Promise<AxiosResponse<StopItem[]>> {
-    return http.get(`/stops`, { params: { q: q } });
+  getStops(q: string): Promise<AxiosResponse<ClusterItem[]>> {
+    return http.get(`/clusters`, { params: { q: q } });
   }
 
-  getStop(id: number): Promise<AxiosResponse<StopItem>> {
-    return http.get(`/stops/${id}`);
+  getCluster(id: string): Promise<AxiosResponse<ClusterItem>> {
+    return http.get(`/clusters/${id}`);
   }
 
-  getUpcomingServices(id: number): Promise<AxiosResponse<ServiceUpcoming[]>> {
-    return http.get(`/services/upcoming`, { params: { stopId: id } });
+  getUpcomingServices(clusterId: string): Promise<AxiosResponse<ServiceUpcoming[]>> {
+    return http.get(`/services/upcoming`, { params: { clusterId: clusterId } });
   }
 
   getService(id: string): Promise<AxiosResponse<ServiceItem>> {
@@ -26,8 +26,8 @@ class Api {
 
 export default new Api();
 
-export type StopItem = {
-  id: number;
+export type ClusterItem = {
+  id: string;
   name: string;
 }
 
@@ -41,7 +41,7 @@ export type ServiceUpcoming = {
 }
 
 export type ServiceStopItem = {
-  stop: StopItem;
+  stopCluster: ClusterItem;
   time: string;
 }
 

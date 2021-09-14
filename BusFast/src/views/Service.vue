@@ -3,13 +3,13 @@
         BUS>>SERVICE
     </h1>
     <div v-if="service">
-        {{ service.name }}
+        Route {{ service.route.name }}: {{ service.route.description }}
     </div>
 
     <div v-if="serviceStops">
         <ul>
-            <li v-for="(ss, index) in serviceStops" :key="index">
-                <router-link :to="{ name: 'Stop', params: { id: ss.stop.id }}">{{ timePart(ss.time) }} {{ss.stop.name}}</router-link>
+            <li v-for="(ss, index) in serviceStops" v-bind:class="{ highlight: highlight(ss.stopCluster) }" :key="index">
+                <router-link :to="{ name: 'Cluster', params: { id: ss.stopCluster.id }}">{{ timePart(ss.time) }} {{ss.stopCluster.name}}</router-link>
             </li>
         </ul>
     </div>
@@ -17,7 +17,7 @@
 
 <script lang="ts">
     import { Options, Vue } from 'vue-class-component';
-    import Api, { ServiceItem, ServiceStopItem } from '@/api';
+    import Api, { ServiceItem, ServiceStopItem, ClusterItem } from '@/api';
 
     @Options({
         props: {
@@ -28,6 +28,10 @@
 
         service: ServiceItem | null = null;
         serviceStops: ServiceStopItem[] | null = null;
+
+        highlight(cluster: ClusterItem) {
+            return this.$route.query && this.$route.query.clusterId === cluster.id.toString();
+        }
 
         mounted() {
             const id = this.$route.params.id as string;

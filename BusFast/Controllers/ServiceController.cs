@@ -37,9 +37,9 @@ namespace BusFast.Controllers
 
         [HttpGet]
         [Route("upcoming")]
-        public ServiceUpcoming[] Upcoming(int stopId)
+        public ServiceUpcoming[] Upcoming(string clusterId)
         {
-            var services = _ds.GetServicesAt(stopId);
+            var services = _ds.GetServicesAt(clusterId);
 
             var iterators = new SimplePriorityQueue<IEnumerator<ServiceStopHelper.Occurrence>>();
             var now = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TZConvert.GetTimeZoneInfo("Europe/London"));

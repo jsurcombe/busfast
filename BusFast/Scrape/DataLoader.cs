@@ -17,34 +17,31 @@ namespace BusFast.Scrape
 
         private readonly HTMLClient _htmlClient;
 
-        private async Task<string[]> LoadRouteNames()
+        public async Task<Route[]> LoadRoutes()
         {
             HtmlDocument document = await _htmlClient.Load($"timetables", $"http://buses.gg/routes_and_times/timetables");
 
-            return document.DocumentNode.SelectNodes("//ul[@id='main-timetable-list']//div[@class='tt-key']").Select(n => n.InnerText).ToArray();
+            var routes = document.DocumentNode.SelectNodes("//ul[@id='main-timetable-list']/li").Select(n => LoadRoute(n)).ToArray();
+
+            foreach (var r in routes)
+                await LoadRouteServices(r);
+
+            return routes;
         }
 
-        public async Task<Route[]> LoadRoutes()
+        private Route LoadRoute(HtmlNode n)
         {
-            var routeNames = await LoadRouteNames();
-
-            var res = new List<Route>();
-
-            foreach (var n in routeNames)
-                res.Add(await LoadRoute(n));
-
-            return res.ToArray();
+            var route = new Route();
+            route.Name = n.SelectSingleNode(".//div[@class='tt-key']").InnerText;
+            route.Description = n.SelectSingleNode(".//div[@class='tt-text']").InnerText;
+            return route;
         }
 
-        private async Task<Route> LoadRoute(string route)
+        private async Task LoadRouteServices(Route route)
         {
-            HtmlDocument document = await _htmlClient.Load($"route{route}", $"http://buses.gg/routes_and_times/timetables/{route}/FALSE");
+            HtmlDocument document = await _htmlClient.Load($"route{route.Name}", $"http://buses.gg/routes_and_times/timetables/{route}/FALSE");
 
-            var res = new Route();
-            res.Name = route;
-            res.Services = document.DocumentNode.SelectNodes("//div[@class='t-table']").SelectMany(n => LoadServices(res, n)).ToArray();
-
-            return res;
+            route.Services = document.DocumentNode.SelectNodes("//div[@class='t-table']").SelectMany(n => LoadServices(route, n)).ToArray();
         }
 
         private Service[] LoadServices(Route route, HtmlNode n)
