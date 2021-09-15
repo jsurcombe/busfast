@@ -4,3 +4,4 @@
 /.vs
 /BusFast/publish/gilligan
 *.user
+package-lock.json
