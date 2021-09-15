@@ -39,7 +39,7 @@ namespace BusFast.Scrape
 
         private async Task LoadRouteServices(Route route)
         {
-            HtmlDocument document = await _htmlClient.Load($"route{route.Name}", $"http://buses.gg/routes_and_times/timetables/{route}/FALSE");
+            HtmlDocument document = await _htmlClient.Load($"route{route.Name}", $"http://buses.gg/routes_and_times/timetables/{route.Name}/FALSE");
 
             route.Services = document.DocumentNode.SelectNodes("//div[@class='t-table']").SelectMany(n => LoadServices(route, n)).ToArray();
         }
