@@ -16,14 +16,9 @@
 </template>
 
 <script lang="ts">
-    import { Options, Vue } from 'vue-class-component';
+    import { Vue } from 'vue-class-component';
     import Api, { ClusterItem, ServiceUpcoming } from '@/api';
 
-    @Options({
-        props: {
-            msg: String
-        }
-    })
     export default class ClusterViewPage extends Vue {
 
         cluster: ClusterItem | null = null;

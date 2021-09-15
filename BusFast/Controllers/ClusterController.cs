@@ -23,8 +23,8 @@ namespace BusFast.Controllers
         [HttpGet]
         public ClusterItem[] Search(string q)
         {
-            if (string.IsNullOrEmpty(q))
-                return new ClusterItem[] { };
+            if (q == null)
+                return _ds.Clusters.Select(c => new ClusterItem(c)).ToArray();
             else
             {
                 var tokens = q.SearchTokens();

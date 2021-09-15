@@ -16,14 +16,9 @@
 </template>
 
 <script lang="ts">
-    import { Options, Vue } from 'vue-class-component';
+    import { Vue } from 'vue-class-component';
     import Api, { ServiceItem, ServiceStopItem, ClusterItem } from '@/api';
 
-    @Options({
-        props: {
-            msg: String
-        }
-    })
     export default class ServiceViewPage extends Vue {
 
         service: ServiceItem | null = null;

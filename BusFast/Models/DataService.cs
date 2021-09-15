@@ -62,7 +62,7 @@ namespace BusFast.Models
 
         private string ClusterId(string clusterName)
         {
-            return new string(clusterName.ToLower().Where(c => char.IsLetter(c)).ToArray());
+            return new string(clusterName.ToLower().Where(c => char.IsLetter(c) || c == ' ').ToArray()).Replace(' ', '-');
         }
 
         private string ClusterName(string stopName)

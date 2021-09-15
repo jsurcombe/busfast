@@ -11,14 +11,9 @@
 </template>
 
 <script lang="ts">
-    import { Options, Vue } from 'vue-class-component';
+    import { Vue } from 'vue-class-component';
     import Api, { ClusterItem } from '@/api';
 
-    @Options({
-        props: {
-            msg: String
-        }
-    })
     export default class Home extends Vue {
 
         stopQ: string = '';
@@ -33,16 +28,17 @@
 
         mounted() {
             this.stopQ = this.$route.query.q as string;
-            if (this.stopQ) {
-                this.getStops();
-            }
+            this.getStops();
         }
 
         getStops() {
-            Api.getStops(this.stopQ)
-                .then(response => {
-                    this.stops = response.data;
-                });
+            if (this.stopQ) {
+                Api.getStops(this.stopQ)
+                    .then(response => {
+                        this.stops = response.data;
+                    });
+            } else
+                this.stops = [];
         }
     }
 </script>

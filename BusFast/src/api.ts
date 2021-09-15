@@ -3,7 +3,7 @@ import { AxiosResponse } from "axios";
 
 class Api {
 
-  getStops(q: string): Promise<AxiosResponse<ClusterItem[]>> {
+  getStops(q: string | null): Promise<AxiosResponse<ClusterItem[]>> {
     return http.get(`/clusters`, { params: { q: q } });
   }
 
