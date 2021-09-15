@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace BusFast.Models
 {
-    public enum DaysCode
+    public enum Direction
     {
-        Friday = 5,
-        Saturday = 6,
-        Sunday = 0
+        Inbound,
+        Outbound
     }
 }

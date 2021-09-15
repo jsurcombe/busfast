@@ -51,15 +51,23 @@ namespace BusFast.Scrape
             var div = n.SelectSingleNode("div[1]");
 
             var divId = div.Id;
-            var dayIdCode = divId.Split('-').Last();
+            var divIdParts = divId.Split('-');
+            var dayIdCode = divIdParts[3];
 
-            var daysCode = Enum.Parse<DaysCode>(dayIdCode, true);
+            var days = Enum.Parse<Days>(dayIdCode, true);
+
+            var direction = divIdParts[2] switch
+            {
+                "0" => Direction.Outbound,
+                "1" => Direction.Inbound,
+                _ => throw new NotImplementedException()
+            };
 
             var stopServiceSets = div.SelectNodes("table/tbody/tr").ToArray();
 
             var serviceCount = stopServiceSets[0].SelectNodes("td").Where(n => !n.HasClass("StopHeader") && !n.HasClass("end-row")).Count();
 
-            var services = Enumerable.Range(0, serviceCount).Select(i => new Service(route) { Days = daysCode, Stops = new List<ServiceStop>() }).ToArray();
+            var services = Enumerable.Range(0, serviceCount).Select(i => new Service(route) { Direction = direction, Days = days, Stops = new List<ServiceStop>() }).ToArray();
 
             var firstCells = stopServiceSets[0].SelectNodes("td").Where(n => !n.HasClass("StopHeader") && !n.HasClass("end-row")).ToArray();
 
@@ -94,5 +102,6 @@ namespace BusFast.Scrape
             res.Name = n.SelectSingleNode("th/span").InnerText;
             return res;
         }
+
     }
 }

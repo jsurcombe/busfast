@@ -9,7 +9,7 @@
     <div v-if="upcomingServices">
         <ul>
             <li v-for="(ss, index) in upcomingServices" :key="index">
-                <router-link :to="{ name: 'Service', params: { id: ss.service.id }, query: { clusterId: $route.params.id }}">{{ timePart(ss.at) }} #{{ss.service.route.name}}: {{ss.service.route.description}}</router-link>
+                <router-link :to="{ name: 'Service', params: { id: ss.service.id }, query: { clusterId: $route.params.id }}">{{ timePart(ss.at) }} #{{ss.service.routeName}}: {{ss.service.description}}</router-link>
             </li>
         </ul>
     </div>

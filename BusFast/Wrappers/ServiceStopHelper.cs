@@ -41,12 +41,12 @@ namespace BusFast.Wrappers
             }
         }
 
-        private int DaysAdvance(DateTime dt, DaysCode days)
+        private int DaysAdvance(DateTime dt, Days days)
         {
             // the number of days from dt until the next day within days
             switch (days)
             {
-                case DaysCode.Friday:
+                case Days.Friday:
                     switch (dt.DayOfWeek)
                     {
                         case DayOfWeek.Friday:
@@ -57,8 +57,8 @@ namespace BusFast.Wrappers
                             return 1;
                     }
 
-                case DaysCode.Saturday:
-                case DaysCode.Sunday:
+                case Days.Saturday:
+                case Days.Sunday:
 
                     return ((int)days + 6 - (int)dt.DayOfWeek) % 7 + 1;
 

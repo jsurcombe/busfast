@@ -3,7 +3,7 @@
         BUS>>SERVICE
     </h1>
     <div v-if="service">
-        Route {{ service.route.name }}: {{ service.route.description }}
+        Route {{ service.routeName }}: {{ service.description }}
     </div>
 
     <div v-if="serviceStops">

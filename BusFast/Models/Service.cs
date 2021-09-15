@@ -12,9 +12,21 @@ namespace BusFast.Models
             Route = route;
         }
 
-        public DaysCode Days { get; set; }
+        public Direction Direction { get; set; }
+        public Days Days { get; set; }
         public List<ServiceStop> Stops { get; set; }
         public Route Route { get; }
         public string Id { get; set; }
+
+        public string Description
+        {
+            get
+            {
+                if (Direction == Direction.Outbound)
+                    return Route.Description;
+                else // reverse the description
+                    return string.Join(" - ", Route.Description.Split('-').Select(s => s.Trim()).Reverse());
+            }
+        }
     }
 }

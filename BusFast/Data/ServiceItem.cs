@@ -11,10 +11,12 @@ namespace BusFast.Data
         public ServiceItem(Service service)
         {
             Id = service.Id;
-            Route = new RouteItem(service.Route);
+            RouteName = service.Route.Name;
+            Description = service.Description;
         }
 
         public string Id { get; }
-        public RouteItem Route { get; set; }
+        public string RouteName { get; }
+        public string Description { get; }
     }
 }
