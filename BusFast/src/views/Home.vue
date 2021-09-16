@@ -18,27 +18,45 @@
 
         stopQ: string = '';
 
+        unbind: (() => void) | null = null;
+
         stops: ClusterItem[] | null = null;
 
         changedQ(q: string) {
-            this.stopQ = q;
-            this.$router.push(`/?q=${this.stopQ}`);
-            this.getStops();
+            this.$router.push(`/?q=${q}`);
         }
 
         mounted() {
-            this.stopQ = this.$route.query.q as string;
-            this.getStops();
+            const update = (q: string) => {
+                this.stopQ = q;
+                this.getStops();
+            };
+
+            update(this.$route.query.q as string);
+
+            this.unbind = this.$router.beforeEach((to, from, next) => {
+                update(to.query.q as string);
+                next();
+            });
+        }
+
+        unmounted() {
+            if (this.unbind)
+                this.unbind();
         }
 
         getStops() {
             if (this.stopQ) {
+                const q = this.stopQ;
                 Api.getStops(this.stopQ)
                     .then(response => {
-                        this.stops = response.data;
+                        if (q === this.stopQ)
+                            this.stops = response.data;
                     });
-            } else
+
+            } else {
                 this.stops = [];
+            }
         }
     }
 </script>

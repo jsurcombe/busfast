@@ -10,7 +10,7 @@
         <ul>
             <li v-for="(ss, index) in upcomingServices" :key="index">
                 <div v-bind:class="{ highlight: highlight(ss) }" >
-                    <router-link :to="{ name: 'Service', params: { id: ss.service.id }, query: { clusterId: $route.params.id }}">{{ timePart(ss.at) }}: {{ss.service.routeName}} <span v-if="ss.stopBound">{{ss.stopBound}}</span></router-link>
+                    <router-link :to="{ name: 'Service', params: { id: ss.service.id }, query: { stopId: ss.stop.id }}">{{ timePart(ss.at) }}: {{ss.service.routeName}} <span v-if="ss.stop.bound">{{ss.stop.bound}}</span></router-link>
                 </div>
                 <div>
                     {{ss.service.description}}
@@ -30,7 +30,7 @@
         upcomingServices: ServiceUpcoming[] | null = null;
 
         highlight(service: ServiceUpcoming) {
-            return this.$route.query && this.$route.query.serviceId === service.service.id.toString();
+            return this.$route.query && this.$route.query.serviceId === service.service.id.toString() && this.$route.query.stopId === service.stop.id.toString();
         }
 
         mounted() {

@@ -37,12 +37,18 @@ export type RouteItem = {
 
 export type ServiceUpcoming = {
   service: ServiceItem;
+  stop: ClusterStopItem;
   at: string;
   bound: string;
 }
 
+export type ClusterStopItem = {
+  id: number;
+}
+
 export type ServiceStopItem = {
-  stopCluster: ClusterItem;
+  stopId: number;
+  cluster: ClusterItem;
   time: string;
 }
 

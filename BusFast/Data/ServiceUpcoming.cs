@@ -12,11 +12,11 @@ namespace BusFast.Data
         {
             Service = new ServiceItem(occurrence.ServiceStop.Service);
             At = occurrence.At;
-            StopBound = occurrence.ServiceStop.Stop.Bound;
+            Stop = new ClusterStopItem(occurrence.ServiceStop.Stop);
         }
 
         public ServiceItem Service { get; }
         public DateTime At { get; }
-        public string StopBound { get; }
+        public ClusterStopItem Stop { get; }
     }
 }

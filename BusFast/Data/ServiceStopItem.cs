@@ -8,11 +8,13 @@ namespace BusFast.Data
     {
         public ServiceStopItem(ServiceStop serviceStop)
         {
-            StopCluster = new ClusterItem(serviceStop.Stop.Cluster);
+            StopId = serviceStop.Stop.Id;
+            Cluster = new ClusterItem(serviceStop.Stop.Cluster);
             Time = serviceStop.Time;
         }
 
-        public ClusterItem StopCluster { get; }
+        public int StopId { get; }
+        public ClusterItem Cluster { get; }
         [JsonConverter(typeof(TimeConverter))]
         public TimeSpan Time { get; }
     }

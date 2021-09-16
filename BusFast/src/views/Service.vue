@@ -9,7 +9,7 @@
     <div v-if="serviceStops">
         <ul>
             <li v-for="(ss, index) in serviceStops" v-bind:class="{ highlight: highlight(ss) }" :key="index">
-                <router-link :to="{ name: 'Cluster', params: { id: ss.stopCluster.id }, query: { serviceId: $route.params.id }}">{{ timePart(ss.time) }} {{ss.stopCluster.name}}</router-link>
+                <router-link :to="{ name: 'Cluster', params: { id: ss.cluster.id }, query: { serviceId: $route.params.id, stopId: ss.stopId }}">{{ timePart(ss.time) }} {{ss.cluster.name}}</router-link>
             </li>
         </ul>
     </div>
@@ -25,7 +25,7 @@
         serviceStops: ServiceStopItem[] | null = null;
 
         highlight(serviceStop: ServiceStopItem) {
-            return this.$route.query && this.$route.query.clusterId === serviceStop.stopCluster.id.toString();
+            return this.$route.query && this.$route.query.stopId === serviceStop.stopId.toString();
         }
 
         mounted() {
