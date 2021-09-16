@@ -38,6 +38,7 @@ export type RouteItem = {
 export type ServiceUpcoming = {
   service: ServiceItem;
   at: string;
+  bound: string;
 }
 
 export type ServiceStopItem = {

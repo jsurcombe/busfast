@@ -26,6 +26,9 @@ namespace BusFast.Models
                 _routes = r.Result.ToDictionary(ri => ri.Name);
                 _stops = r.Result.SelectMany(rn => rn.Services).SelectMany(svc => svc.Stops).Select(s => s.Stop).GroupBy(s => s.Id).Select(g => g.First()).ToArray();
 
+                foreach (var s in _stops)
+                    FixStopName(s);
+
                 _stopDictionary = _stops.ToDictionary(s => s.Id);
 
                 // canonicalise stops
@@ -44,9 +47,8 @@ namespace BusFast.Models
                             Stops = g.ToArray()
                         };
                     })
+                    .OrderBy(c => c.Id.Replace("-", ""))
                     .ToArray();
-
-                var cc = _clusters.Where(k => k.Id == "brayecrossroads");
 
                 _clusterDictionary = _clusters.ToDictionary(c => c.Id);
 
@@ -58,6 +60,17 @@ namespace BusFast.Models
                 _serviceDictionary = r.Result.SelectMany(rn => rn.Services).ToDictionary(svc => svc.Id);
 
             });
+        }
+
+        private void FixStopName(Stop s)
+        {
+            s.Name = string.Join(' ', s.Name.Split(' ', StringSplitOptions.RemoveEmptyEntries));
+
+            s.Name = s.Name switch
+            {
+                "La Coutures - Northbound" => "La Couture - Northbound",
+                _ => s.Name
+            };
         }
 
         private string ClusterId(string clusterName)

@@ -59,11 +59,7 @@ namespace BusFast.Controllers
             {
                 var n = iterators.Dequeue();
 
-                res.Add(new ServiceUpcoming()
-                {
-                    Service = new ServiceItem(n.Current.ServiceStop.Service),
-                    At = n.Current.At
-                });
+                res.Add(new ServiceUpcoming(n.Current));
 
                 n.MoveNext();
                 iterators.Enqueue(n, (float)(n.Current.At - DateTime.Now).TotalDays);

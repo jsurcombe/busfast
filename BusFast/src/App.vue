@@ -18,16 +18,21 @@
     }
 
     li {
-        line-height: 1.5em;
+        padding: 0.2em;
     }
 
-        li.highlight {
-            font-weight: bold;
-            background-color: #42b983;
-            color: black;
-        }
+    li a {
+        display: block;
+        padding: 0.2em;
+    }
 
-        li.highlight a {
+    .highlight {
+        font-weight: bold;
+        background-color: #42b983;
+        color: black;
+    }
+
+        .highlight a {
             color: black;
         }
 
