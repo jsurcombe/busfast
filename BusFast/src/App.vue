@@ -2,6 +2,7 @@
     <div id="nav">
         <router-link :to="{ name: 'Home' }">[Home]</router-link>
         <router-link :to="{ name: 'Clusters' }">[Stops]</router-link>
+        <router-link :to="{ name: 'Journey' }">[Journey Planner]</router-link>
     </div>
     <router-view />
 </template>
@@ -12,6 +13,27 @@
 
 <style>
 
+    ul.suggestions {
+        background-color: white;
+        color: black;
+        position: absolute;
+        left: 0;
+        right: 0;
+    }
+
+    div.autocomplete {
+        display: inline-block;
+        position: relative;
+    }
+
+    ul.suggestions {
+        margin: 0
+    }
+
+    .suggestions > li:hover {
+        background-color: #ddd
+    }
+
     ul {
         list-style-type: none;
         padding: 0;
@@ -21,10 +43,10 @@
         padding: 0.2em;
     }
 
-    li a {
-        display: block;
-        padding: 0.2em;
-    }
+        li a {
+            display: block;
+            padding: 0.2em;
+        }
 
     .highlight {
         font-weight: bold;

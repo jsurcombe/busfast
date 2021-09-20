@@ -14,7 +14,7 @@
     import { Vue } from 'vue-class-component';
     import Api, { ClusterItem } from '@/api';
 
-    export default class Home extends Vue {
+    export default class ClusterList extends Vue {
         stops: ClusterItem[] | null = null;
 
         mounted() {

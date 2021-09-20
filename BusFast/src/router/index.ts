@@ -8,6 +8,11 @@ const routes: Array<RouteRecordRaw> = [
     component: Home
   },
   {
+    path: '/journey',
+    name: 'Journey',
+    component: () => import(/* webpackChunkName: "clusters" */ '../views/Journey.vue')
+  },
+  {
     path: '/clusters',
     name: 'Clusters',
     component: () => import(/* webpackChunkName: "clusters" */ '../views/Clusters.vue')
