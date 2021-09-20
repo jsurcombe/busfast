@@ -35,7 +35,6 @@ namespace BusFast.Controllers
             }
         }
 
-
         [HttpGet]
         [Route("{id}")]
         public ClusterItem View(string id) => new ClusterItem(_ds.GetCluster(id));

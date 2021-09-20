@@ -2,7 +2,7 @@
     <div class="autocomplete">
         <input type="text" v-model="stopQ" @input="changedQ($event.target.value)" :placeholder="placeholder">
         <ul class="suggestions">
-            <li v-on:click="selectStop(stop)" v-for="stop in stops" :key="stop.id">{{ stop.name }}</li>
+            <li @click="selectStop(stop)" v-for="stop in stops" :key="stop.id">{{ stop.name }}</li>
         </ul>
     </div>
 </template>
@@ -49,6 +49,8 @@
         }
 
         selectStop(stop: ClusterItem) {
+
+            this.$emit('input', stop);
             this.stop = stop;
             this.stopQ = stop.name;
             this.stops = null;

@@ -1,4 +1,5 @@
 ﻿using BusFast.Data;
+using BusFast.Foundation;
 using BusFast.Models;
 using BusFast.Wrappers;
 using Microsoft.AspNetCore.Mvc;
@@ -42,7 +43,8 @@ namespace BusFast.Controllers
             var services = _ds.GetServicesAt(clusterId);
 
             var iterators = new SimplePriorityQueue<IEnumerator<ServiceStopHelper.Occurrence>>();
-            var now = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TZConvert.GetTimeZoneInfo("Europe/London"));
+
+            var now = Globals.GuernseyNow;
 
             foreach (var s in services)
             {

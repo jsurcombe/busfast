@@ -22,8 +22,8 @@ namespace BusFast.Wrappers
 
             public Occurrence(ServiceStop serviceStop, DateTime at)
             {
-                this.ServiceStop = serviceStop;
-                this.At = at;
+                ServiceStop = serviceStop;
+                At = at;
             }
         }
 
