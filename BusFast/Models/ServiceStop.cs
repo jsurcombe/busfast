@@ -15,5 +15,8 @@ namespace BusFast.Models
         public Stop Stop { get; set; }
         public TimeSpan Time { get; set; }
         public Service Service { get; }
+
+        // link to the next ServiceStop
+        public ServiceStop? Next { get; set; }
     }
 }

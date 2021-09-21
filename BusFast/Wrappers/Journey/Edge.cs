@@ -7,5 +7,15 @@ namespace BusFast.Wrappers.Journey
 {
     public class Edge
     {
+        public Edge(DateTime at, float cost, Node to)
+        {
+            At = at;
+            Cost = cost;
+            To = to;
+        }
+
+        public readonly DateTime At;
+        public readonly float Cost;
+        public readonly Node To;
     }
 }

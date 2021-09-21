@@ -1,4 +1,6 @@
-﻿using BusFast.Models;
+﻿using BusFast.Foundation;
+using BusFast.Models;
+using Priority_Queue;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +12,19 @@ namespace BusFast.Wrappers.Journey
     {
         private readonly Stop _stop;
 
-        public StopNode(DateTime at, Stop stop) : base(at) { _stop = stop; }
-        public override IEnumerable<Edge> Edges => throw new NotImplementedException();
+        public StopNode(Stop stop, DataService ds) : base(ds) { _stop = stop; }
+
+        public override IEnumerable<Edge> Edges(DateTime at)
+        {
+            // get an iterator for services leaving here after now
+            var serviceEnumerator = ServiceStopHelper.Occurrences(_ds.GetServicesAtStop(_stop.Id), at).GetEnumerator();
+
+            // board an upcoming service
+            yield return new Edge(at, 0f, new BoardNode(serviceEnumerator, _ds));
+
+            // we are also at the cluster
+            yield return new Edge(at, 0f, new ClusterNode(_stop.Cluster, _ds));
+        }
 
         public override int GetHashCode()
         {

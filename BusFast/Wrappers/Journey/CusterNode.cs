@@ -11,19 +11,16 @@ namespace BusFast.Wrappers.Journey
     {
         private readonly Cluster _cluster;
 
-        public ClusterNode(Cluster cluster)
+        public ClusterNode(Cluster cluster, DataService ds) : base(ds)
         {
             _cluster = cluster;
         }
 
-        public override IEnumerable<Edge> Edges(Cursor c)
+        public override IEnumerable<Edge> Edges(DateTime at)
         {
-            get
-            {
-                // be standing at any stop in this cluster
-                foreach (var s in _cluster.Stops)
-                    yield return new Edge(c.At, 0.0, new StopNode(s));
-            }
+            // be standing at any stop in this cluster
+            foreach (var s in _cluster.Stops)
+                yield return new Edge(at, 0f, new StopNode(s, _ds));
         }
 
         public override int GetHashCode()
@@ -33,7 +30,7 @@ namespace BusFast.Wrappers.Journey
 
         public override bool Equals(object obj)
         {
-            return obj is AtClusterState acs && acs._cluster == _cluster;
+            return obj is ClusterNode cn && cn._cluster == _cluster;
         }
     }
 }

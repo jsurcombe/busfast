@@ -42,32 +42,7 @@ namespace BusFast.Controllers
         {
             var services = _ds.GetServicesAt(clusterId);
 
-            var iterators = new SimplePriorityQueue<IEnumerator<ServiceStopHelper.Occurrence>>();
-
-            var now = Globals.GuernseyNow;
-
-            foreach (var s in services)
-            {
-                var sh = new ServiceStopHelper(s);
-                var occ = sh.Occurrences(now).GetEnumerator();
-                occ.MoveNext();
-
-                iterators.Enqueue(occ, (float)(occ.Current.At - DateTime.Now).TotalDays);
-            }
-
-            var res = new List<ServiceUpcoming>();
-
-            while (res.Count < 10)
-            {
-                var n = iterators.Dequeue();
-
-                res.Add(new ServiceUpcoming(n.Current));
-
-                n.MoveNext();
-                iterators.Enqueue(n, (float)(n.Current.At - DateTime.Now).TotalDays);
-            }
-
-            return res.ToArray();
+            return ServiceStopHelper.Occurrences(services, Globals.GuernseyNow).Take(10).Select(ss => new ServiceUpcoming(ss)).ToArray();
         }
     }
 }

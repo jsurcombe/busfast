@@ -86,9 +86,16 @@ namespace BusFast.Scrape
                     if (t != " - ")
                     {
                         var service = services[j];
-                        service.Stops.Add(new ServiceStop(service) { Stop = stops[i], Time = TimeSpan.Parse(t) });
+                        var ss = new ServiceStop(service) { Stop = stops[i], Time = TimeSpan.Parse(t) };
+                        service.Stops.Add(ss);
                     }
                 }
+            }
+
+            foreach (var service in services) // link stops (for navigation)
+            {
+                for (var i = 1; i < service.Stops.Count; i++)
+                    service.Stops[i - 1].Next = service.Stops[i];
             }
 
             return services;

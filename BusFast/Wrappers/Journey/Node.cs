@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusFast.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,10 +8,13 @@ namespace BusFast.Wrappers.Journey
 {
     public abstract class Node
     {
-        public readonly DateTime At;
+        protected readonly DataService _ds;
 
-        public Node(DateTime at) { At = at; }
+        protected Node(DataService ds)
+        {
+            _ds = ds;
+        }
 
-        public abstract IEnumerable<Node> Edges { get; }
+        public abstract IEnumerable<Edge> Edges(DateTime at);
     }
 }

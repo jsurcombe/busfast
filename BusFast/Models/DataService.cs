@@ -15,6 +15,14 @@ namespace BusFast.Models
         private Stop[] _stops;
         private Dictionary<int, Stop> _stopDictionary;
         private ILookup<string, ServiceStop> _servicesByCluster;
+        private ILookup<int, ServiceStop> _servicesByStop;
+
+        internal IEnumerable<ServiceStop> GetServicesAtStop(int id)
+        {
+            _loadTask.Wait();
+            return _servicesByStop[id];
+        }
+
         private Dictionary<string, Service> _serviceDictionary;
         private Cluster[] _clusters;
         private Dictionary<string, Cluster> _clusterDictionary;
@@ -57,6 +65,7 @@ namespace BusFast.Models
                         s.Cluster = c;
 
                 _servicesByCluster = r.Result.SelectMany(rn => rn.Services).SelectMany(svc => svc.Stops).ToLookup(ss => ss.Stop.Cluster.Id);
+                _servicesByStop = r.Result.SelectMany(rn => rn.Services).SelectMany(svc => svc.Stops).ToLookup(ss => ss.Stop.Id);
                 _serviceDictionary = r.Result.SelectMany(rn => rn.Services).ToDictionary(svc => svc.Id);
 
             });
