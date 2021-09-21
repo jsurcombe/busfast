@@ -28,5 +28,7 @@ namespace BusFast.Models
                     return string.Join(" - ", Route.Description.Split('-').Select(s => s.Trim()).Reverse());
             }
         }
+
+        public Service Return { get; internal set; }
     }
 }

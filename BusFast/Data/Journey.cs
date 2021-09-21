@@ -10,7 +10,7 @@ namespace BusFast.Data
     {
         public Journey(Cursor c)
         {
-            Steps = c.Cursors.Select(ci => MakeStep(ci)).ToArray();
+            Steps = c.Cursors.Select(ci => MakeStep(ci)).Where(s => s.Description != null).ToArray();
         }
 
         public Step[] Steps { get; }

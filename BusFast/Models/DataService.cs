@@ -64,10 +64,26 @@ namespace BusFast.Models
                     foreach (var s in c.Stops)
                         s.Cluster = c;
 
-                _servicesByCluster = r.Result.SelectMany(rn => rn.Services).SelectMany(svc => svc.Stops).ToLookup(ss => ss.Stop.Cluster.Id);
-                _servicesByStop = r.Result.SelectMany(rn => rn.Services).SelectMany(svc => svc.Stops).ToLookup(ss => ss.Stop.Id);
-                _serviceDictionary = r.Result.SelectMany(rn => rn.Services).ToDictionary(svc => svc.Id);
+                var allServices = r.Result.SelectMany(rn => rn.Services);
 
+                _servicesByCluster = allServices.SelectMany(svc => svc.Stops).ToLookup(ss => ss.Stop.Cluster.Id);
+                _servicesByStop = allServices.SelectMany(svc => svc.Stops).ToLookup(ss => ss.Stop.Id);
+                _serviceDictionary = allServices.ToDictionary(svc => svc.Id);
+
+                foreach (var route in r.Result)
+                {
+                    // find service returns
+                    foreach (var svc in route.Services.Where(si => si.Direction == Direction.Outbound))
+                    {
+                        var terminal = svc.Stops[svc.Stops.Count - 1];
+
+                        svc.Return = route.Services.Where(si => si.Direction == Direction.Inbound
+                            && si.Days == svc.Days
+                            && si.Stops[0].Stop.Cluster == terminal.Stop.Cluster
+                            && si.Stops[0].Time >= terminal.Time)
+                            .FirstOrDefault();
+                    }
+                }
             });
         }
 

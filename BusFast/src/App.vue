@@ -27,7 +27,8 @@
     }
 
     ul.suggestions {
-        margin: 0
+        margin: 0;
+        z-index: 1;
     }
 
     .suggestions > li:hover {
@@ -95,4 +96,10 @@
             #nav a .router-link-exact-active {
                 color: #42b983;
             }
+
+    table {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: left;
+    }
 </style>

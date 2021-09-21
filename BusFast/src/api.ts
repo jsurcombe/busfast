@@ -22,6 +22,10 @@ class Api {
   getServiceStops(id: string): Promise<AxiosResponse<ServiceStopItem[]>> {
     return http.get(`/services/${id}/stops`);
   }
+
+  getJourney(fromClusterId: string, toClusterId: string): Promise<AxiosResponse<Journey>> {
+    return http.get(`/journey`, { params: { fromClusterId: fromClusterId, toClusterId: toClusterId } });
+  }
 }
 
 export default new Api();
@@ -57,3 +61,11 @@ export type ServiceItem = {
   routeName: string;
 }
 
+type Step = {
+  at: string;
+  description: string;
+}
+
+export type Journey = {
+  steps: Step[];
+}

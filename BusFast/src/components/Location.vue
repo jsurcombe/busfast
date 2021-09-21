@@ -1,6 +1,6 @@
 ﻿<template>
     <div class="autocomplete">
-        <input type="text" v-model="stopQ" @input="changedQ($event.target.value)" :placeholder="placeholder">
+        <input type="text" v-model="stopQ" @input.stop="changedQ($event.target.value)" :placeholder="placeholder">
         <ul class="suggestions">
             <li @click="selectStop(stop)" v-for="stop in stops" :key="stop.id">{{ stop.name }}</li>
         </ul>

@@ -24,11 +24,11 @@ namespace BusFast.Controllers
         }
 
         [HttpGet]
-        public Journey Get(string fromCluster, string toCluster)
+        public Journey Get(string fromClusterId, string toClusterId)
         {
-            var start = new Cursor(Globals.GuernseyNow, new ClusterNode(_ds.GetCluster(fromCluster), _ds));
+            var start = new Cursor(Globals.GuernseyNow, new ClusterNode(_ds.GetCluster(fromClusterId), _ds));
 
-            var toNode = new ClusterNode(_ds.GetCluster(toCluster), _ds);
+            var toNode = new ClusterNode(_ds.GetCluster(toClusterId), _ds);
 
             var sr = ShortestRoutes(start).First(cn => cn.Node.Equals(toNode));
 
@@ -37,7 +37,6 @@ namespace BusFast.Controllers
 
         private IEnumerable<Cursor> ShortestRoutes(Cursor start)
         {
-
             var unvisited = new SimplePriorityQueue<Cursor>();
 
             unvisited.Enqueue(start, start.Priority);
@@ -62,7 +61,6 @@ namespace BusFast.Controllers
                         continue; // already visited
 
                     var nextCursor = new Cursor(c, e);
-
                     unvisited.Enqueue(nextCursor, nextCursor.Priority);
                 }
 
