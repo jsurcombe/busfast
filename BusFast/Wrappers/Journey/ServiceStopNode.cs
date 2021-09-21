@@ -8,32 +8,32 @@ namespace BusFast.Wrappers.Journey
 {
     public class ServiceStopNode : Node
     {
-        private ServiceStopHelper.Occurrence _serviceStop;
+        public readonly ServiceStopHelper.Occurrence ServiceStop;
 
         public ServiceStopNode(ServiceStopHelper.Occurrence serviceStop, DataService ds) : base(ds)
         {
-            _serviceStop = serviceStop;
+            ServiceStop = serviceStop;
         }
 
         public override IEnumerable<Edge> Edges(DateTime at)
         {
             // stay on the bus
-            var next = _serviceStop.Next;
+            var next = ServiceStop.Next;
             if (next != null) // can't stay on the bus - this is the end of the service
-                yield return new Edge(next.At, 0f, new ServiceStopNode(next, _ds));
+                yield return new WaitEdge(next.At, 0f, new ServiceStopNode(next, _ds)); // remain on the bus
 
             // get off the bus
-            yield return new Edge(_serviceStop.At, 0f, new StopNode(_serviceStop.ServiceStop.Stop, _ds));
+            yield return new AlightEdge(ServiceStop.At, 0f, new StopNode(ServiceStop.ServiceStop.Stop, _ds));
         }
 
         public override int GetHashCode()
         {
-            return _serviceStop.GetHashCode();
+            return ServiceStop.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            return obj is ServiceStopNode bo && bo._serviceStop.Equals(_serviceStop);
+            return obj is ServiceStopNode bo && bo.ServiceStop.Equals(ServiceStop);
         }
     }
 }

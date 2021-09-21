@@ -20,7 +20,7 @@ namespace BusFast.Wrappers.Journey
         {
             // be standing at any stop in this cluster
             foreach (var s in _cluster.Stops)
-                yield return new Edge(at, 0f, new StopNode(s, _ds));
+                yield return new WaitEdge(at, 0f, new StopNode(s, _ds));
         }
 
         public override int GetHashCode()

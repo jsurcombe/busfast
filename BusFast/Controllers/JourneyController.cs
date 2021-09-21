@@ -26,13 +26,13 @@ namespace BusFast.Controllers
         [HttpGet]
         public Journey Get(string fromCluster, string toCluster)
         {
-            var start = new Cursor(Globals.GuernseyNow, 0f, new ClusterNode(_ds.GetCluster(fromCluster), _ds));
+            var start = new Cursor(Globals.GuernseyNow, new ClusterNode(_ds.GetCluster(fromCluster), _ds));
 
             var toNode = new ClusterNode(_ds.GetCluster(toCluster), _ds);
 
             var sr = ShortestRoutes(start).First(cn => cn.Node.Equals(toNode));
 
-            throw new NotImplementedException();
+            return new Journey(sr);
         }
 
         private IEnumerable<Cursor> ShortestRoutes(Cursor start)

@@ -10,30 +10,30 @@ namespace BusFast.Wrappers.Journey
 {
     public class StopNode : Node
     {
-        private readonly Stop _stop;
+        public readonly Stop Stop;
 
-        public StopNode(Stop stop, DataService ds) : base(ds) { _stop = stop; }
+        public StopNode(Stop stop, DataService ds) : base(ds) { Stop = stop; }
 
         public override IEnumerable<Edge> Edges(DateTime at)
         {
             // get an iterator for services leaving here after now
-            var serviceEnumerator = ServiceStopHelper.Occurrences(_ds.GetServicesAtStop(_stop.Id), at).GetEnumerator();
+            var serviceEnumerator = ServiceStopHelper.Occurrences(_ds.GetServicesAtStop(Stop.Id), at).GetEnumerator();
 
-            // board an upcoming service
-            yield return new Edge(at, 0f, new BoardNode(serviceEnumerator, _ds));
+            // decide to board an upcoming service
+            yield return new WaitEdge(at, 0f, new BoardNode(serviceEnumerator, _ds));
 
             // we are also at the cluster
-            yield return new Edge(at, 0f, new ClusterNode(_stop.Cluster, _ds));
+            yield return new WaitEdge(at, 0f, new ClusterNode(Stop.Cluster, _ds));
         }
 
         public override int GetHashCode()
         {
-            return _stop.GetHashCode();
+            return Stop.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            return obj is StopNode ass && ass._stop == _stop;
+            return obj is StopNode ass && ass.Stop == Stop;
         }
     }
 }

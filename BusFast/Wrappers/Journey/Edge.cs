@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BusFast.Wrappers.Journey
 {
-    public class Edge
+    public abstract class Edge
     {
         public Edge(DateTime at, float cost, Node to)
         {
@@ -17,5 +17,7 @@ namespace BusFast.Wrappers.Journey
         public readonly DateTime At;
         public readonly float Cost;
         public readonly Node To;
+
+        public abstract string Describe();
     }
 }
