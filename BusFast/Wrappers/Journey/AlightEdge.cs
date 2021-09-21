@@ -10,7 +10,7 @@ namespace BusFast.Wrappers.Journey
     {
         private readonly Stop _stop;
 
-        public AlightEdge(DateTime at, float cost, StopNode to) : base(at, cost, to)
+        public AlightEdge(DateTime at, StopNode to) : base(at, 0f, to)
         {
             _stop = to.Stop;
         }

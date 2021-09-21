@@ -22,7 +22,7 @@ namespace BusFast.Wrappers.Journey
         public override IEnumerable<Edge> Edges(DateTime at)
         {
             // board this service
-            yield return new BoardEdge(_thisOccurrence.At, 0f, new ServiceStopNode(_thisOccurrence, _ds));
+            yield return new BoardEdge(_thisOccurrence.At, new ServiceStopNode(_thisOccurrence, _ds));
 
             // decide to board the next service
             yield return new WaitEdge(_thisOccurrence.At, 0f, new BoardNode(_occurrences, _ds));

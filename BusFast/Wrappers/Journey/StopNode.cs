@@ -20,10 +20,10 @@ namespace BusFast.Wrappers.Journey
             var serviceEnumerator = ServiceStopHelper.Occurrences(_ds.GetServicesAtStop(Stop.Id), at).GetEnumerator();
 
             // decide to board an upcoming service
-            yield return new WaitEdge(at, 0f, new BoardNode(serviceEnumerator, _ds));
+            yield return new WaitEdge(at, 2f, new BoardNode(serviceEnumerator, _ds));
 
-            // we are also at the cluster
-            yield return new WaitEdge(at, 0f, new ClusterNode(Stop.Cluster, _ds));
+            // we are also at the cluster - which allows us to transition to another stop in the cluster
+            yield return new WaitEdge(at, 1f, new ClusterNode(Stop.Cluster, _ds));
         }
 
         public override int GetHashCode()

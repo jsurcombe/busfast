@@ -23,7 +23,7 @@ namespace BusFast.Wrappers.Journey
                 yield return new WaitEdge(next.At, 0f, new ServiceStopNode(next, _ds)); // remain on the bus
 
             // get off the bus
-            yield return new AlightEdge(ServiceStop.At, 0f, new StopNode(ServiceStop.ServiceStop.Stop, _ds));
+            yield return new AlightEdge(ServiceStop.At, new StopNode(ServiceStop.ServiceStop.Stop, _ds));
         }
 
         public override int GetHashCode()
