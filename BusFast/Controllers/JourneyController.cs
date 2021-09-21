@@ -26,11 +26,19 @@ namespace BusFast.Controllers
         [HttpGet]
         public Journey Get(string fromCluster, string toCluster)
         {
+            var startCursor = new Cursor(Globals.GuernseyNow, 0f, new ClusterNode(_ds.GetCluster(fromCluster)));
+
+            var toNode = new ClusterNode(_ds.GetCluster(toCluster));
+
+            var sr = ShortestRoutes(thisPath).First(cn => cn.Node.Equals(toNode));
+        }
+
+        private IEnumerable<Cursor> ShortestRoutes(Cursor start)
+        {
+
             var unvisited = new SimplePriorityQueue<Cursor>();
 
-            var thisPath = new Cursor(Globals.GuernseyNow, 0f, new ClusterNode(_ds.GetCluster(fromCluster)));
-
-            unvisited.Enqueue(thisPath, thisPath.Priority);
+            unvisited.Enqueue(start, start.Priority);
 
             var visited = new HashSet<Node>();
 
@@ -40,30 +48,23 @@ namespace BusFast.Controllers
                 Cursor c;
                 do
                 {
-                    if (unvisited.Count == 0) // nothing left
+                    if (!unvisited.TryDequeue(out c))
                         yield break;
-
-                    c = unvisited.Poll();
-                } while (visited.Contains(c.To));
+                } while (visited.Contains(c.Node));
 
                 yield return c;
 
-                // iterate the edges from this location
-                if (_edges.TryGetValue(c.To, out var edges))
+                foreach (var e in c.Node.Edges)
                 {
-                    foreach (var e in edges)
-                    {
-                        if (visited.Contains(e.To))
-                            continue; // already visited
+                    if (visited.Contains(e.Node))
+                        continue; // already visited
 
-                        if (!filter(e)) // excluded edge
-                            continue;
+                    var nextCursor = new Cursor(c, e);
 
-                        unvisited.Add(new Cursor(c, e));
-                    }
+                    unvisited.Enqueue(nextCursor, nextCursor.Priority);
                 }
 
-                visited.Add(c.To);
+                visited.Add(c.Node);
             }
         }
     }
