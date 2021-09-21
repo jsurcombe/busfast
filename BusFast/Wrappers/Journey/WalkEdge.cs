@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace BusFast.Wrappers.Journey
 {
-    public class AlightEdge : Edge
+    public class WalkEdge : Edge
     {
         private readonly Stop _stop;
 
-        public AlightEdge(DateTime at, StopNode to) : base(at, 0f, to)
+        public WalkEdge(DateTime at, TimeSpan distance, StopNode to) : base(at, (float)distance.TotalMinutes, to)
         {
             _stop = to.Stop;
         }
 
         public override string Describe()
         {
-            return $"Get off at {_stop.Cluster.Name}";
+            return $"Walk to {_stop.Name}";
         }
     }
 }

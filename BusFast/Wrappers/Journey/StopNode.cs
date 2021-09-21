@@ -24,6 +24,13 @@ namespace BusFast.Wrappers.Journey
 
             // we are also at the cluster - which allows us to transition to another stop in the cluster
             yield return new WaitEdge(at, 1f, new ClusterNode(Stop.Cluster, _ds));
+
+            // walk to a neighbouring stop
+            foreach (var s in _ds.GetNeighbours(Stop.Id))
+            {
+                var timeEstimate = (s.Value * 4) + TimeSpan.FromMinutes(2);
+                yield return new WalkEdge(at + timeEstimate, timeEstimate, new StopNode(s.Key, _ds));
+            }
         }
 
         public override int GetHashCode()

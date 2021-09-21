@@ -23,5 +23,7 @@ namespace BusFast.Models
                     return Name.Substring(i + 1).Trim();
             }
         }
+
+        public override string ToString() => Name;
     }
 }

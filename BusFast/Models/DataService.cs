@@ -11,7 +11,6 @@ namespace BusFast.Models
     public class DataService
     {
         private readonly Task _loadTask;
-        private Dictionary<string, Route> _routes;
         private Stop[] _stops;
         private Dictionary<int, Stop> _stopDictionary;
         private ILookup<string, ServiceStop> _servicesByCluster;
@@ -26,12 +25,12 @@ namespace BusFast.Models
         private Dictionary<string, Service> _serviceDictionary;
         private Cluster[] _clusters;
         private Dictionary<string, Cluster> _clusterDictionary;
+        private Dictionary<int, Dictionary<Stop, TimeSpan>> _stopPairs;
 
         public DataService(DataLoader dataLoader)
         {
             _loadTask = dataLoader.LoadRoutes().ContinueWith(r =>
             {
-                _routes = r.Result.ToDictionary(ri => ri.Name);
                 _stops = r.Result.SelectMany(rn => rn.Services).SelectMany(svc => svc.Stops).Select(s => s.Stop).GroupBy(s => s.Id).Select(g => g.First()).ToArray();
 
                 foreach (var s in _stops)
@@ -84,7 +83,34 @@ namespace BusFast.Models
                             .FirstOrDefault();
                     }
                 }
+
+                var stopPairs = new Dictionary<int, Dictionary<Stop, List<TimeSpan>>>();
+
+                // build walking routes
+                foreach (var s in allServices)
+                {
+                    for (int i = 1; i < s.Stops.Count; i++)
+                    {
+                        var from = s.Stops[i - 1];
+                        if (!stopPairs.TryGetValue(from.Stop.Id, out var toDict))
+                            stopPairs[from.Stop.Id] = toDict = new Dictionary<Stop, List<TimeSpan>>();
+
+                        var to = s.Stops[i];
+                        if (!toDict.TryGetValue(to.Stop, out var l))
+                            toDict[to.Stop] = l = new List<TimeSpan>();
+
+                        l.Add(to.Time - from.Time);
+                    }
+                }
+
+                _stopPairs = stopPairs.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToDictionary(s => s.Key, s => TimeSpan.FromMinutes(s.Value.Select(t => t.TotalMinutes).Sum() / s.Value.Count)));
+
             });
+        }
+
+        public Dictionary<Stop, TimeSpan> GetNeighbours(int stopId)
+        {
+            return _stopPairs[stopId];
         }
 
         private void FixStopName(Stop s)
