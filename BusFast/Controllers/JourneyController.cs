@@ -2,7 +2,9 @@
 using BusFast.Foundation;
 using BusFast.Models;
 using BusFast.Wrappers;
+using BusFast.Wrappers.Journey;
 using Microsoft.AspNetCore.Mvc;
+using Priority_Queue;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,16 +26,44 @@ namespace BusFast.Controllers
         [HttpGet]
         public Journey Get(string fromCluster, string toCluster)
         {
-            var fromState = new AtClusterState(Globals.GuernseyNow, _ds.GetCluster(fromCluster));
+            var unvisited = new SimplePriorityQueue<Cursor>();
 
-            // dijkstra
-            var visited = new HashSet<JourneyState>();
+            var thisPath = new Cursor(Globals.GuernseyNow, 0f, new ClusterNode(_ds.GetCluster(fromCluster)));
 
-            visited.Add(fromState);
+            unvisited.Enqueue(thisPath, thisPath.Priority);
 
-            foreach (var e in fromState.NextStates)
+            var visited = new HashSet<Node>();
+
+            while (true)
             {
+                // take the first path
+                Cursor c;
+                do
+                {
+                    if (unvisited.Count == 0) // nothing left
+                        yield break;
 
+                    c = unvisited.Poll();
+                } while (visited.Contains(c.To));
+
+                yield return c;
+
+                // iterate the edges from this location
+                if (_edges.TryGetValue(c.To, out var edges))
+                {
+                    foreach (var e in edges)
+                    {
+                        if (visited.Contains(e.To))
+                            continue; // already visited
+
+                        if (!filter(e)) // excluded edge
+                            continue;
+
+                        unvisited.Add(new Cursor(c, e));
+                    }
+                }
+
+                visited.Add(c.To);
             }
         }
     }
