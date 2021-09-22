@@ -31,15 +31,20 @@ namespace BusFast.Models
         {
             _loadTask = dataLoader.LoadRoutes().ContinueWith(r =>
             {
-                _stops = r.Result.SelectMany(rn => rn.Services).SelectMany(svc => svc.Stops).Select(s => s.Stop).GroupBy(s => s.Id).Select(g => g.First()).ToArray();
+                var allServices = r.Result.SelectMany(rn => rn.Services);
+
+                _stops = allServices.SelectMany(svc => svc.Stops).Select(s => s.Stop).GroupBy(s => s.Id).Select(g => g.First()).ToArray();
 
                 foreach (var s in _stops)
                     FixStopName(s);
 
                 _stopDictionary = _stops.ToDictionary(s => s.Id);
 
+                foreach (var s in allServices)
+                    FixStops(s);
+
                 // canonicalise stops
-                foreach (var s in r.Result.SelectMany(route => route.Services).SelectMany(srv => srv.Stops))
+                foreach (var s in allServices.SelectMany(srv => srv.Stops))
                     s.Stop = _stopDictionary[s.Stop.Id];
 
                 _clusters = _stops.GroupBy(s => ClusterId(ClusterName(s.Name)))
@@ -62,8 +67,6 @@ namespace BusFast.Models
                 foreach (var c in _clusters)
                     foreach (var s in c.Stops)
                         s.Cluster = c;
-
-                var allServices = r.Result.SelectMany(rn => rn.Services);
 
                 _servicesByCluster = allServices.SelectMany(svc => svc.Stops).ToLookup(ss => ss.Stop.Cluster.Id);
                 _servicesByStop = allServices.SelectMany(svc => svc.Stops).ToLookup(ss => ss.Stop.Id);
@@ -99,13 +102,33 @@ namespace BusFast.Models
                         if (!toDict.TryGetValue(to.Stop, out var l))
                             toDict[to.Stop] = l = new List<TimeSpan>();
 
+                        if (to.Time < from.Time)
+                            throw new NotImplementedException();
+
                         l.Add(to.Time - from.Time);
                     }
                 }
 
-                _stopPairs = stopPairs.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToDictionary(s => s.Key, s => TimeSpan.FromMinutes(s.Value.Select(t => t.TotalMinutes).Sum() / s.Value.Count)));
+                _stopPairs = stopPairs.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToDictionary(s => s.Key, s =>
+                {
+                    return TimeSpan.FromMinutes(s.Value.Select(t => t.TotalMinutes).Sum() / s.Value.Count);
+                }));
 
             });
+        }
+
+        private void FixStops(Service s)
+        {
+            var VALE_KIOSK_NORTHBOUND = 890000691;
+            var TRINITY_SQUARE_SOUTHBOUND = 890000603;
+            var VALE_CHURCH_SOUTHBOUND = 890000499;
+
+            // fix bug in route 13
+            for (var i = 1; i < s.Stops.Count; i++)
+            {
+                if (s.Stops[i - 1].Stop.Id == VALE_KIOSK_NORTHBOUND && s.Stops[i].Stop.Id == TRINITY_SQUARE_SOUTHBOUND)
+                    s.Stops[i].Stop = _stopDictionary[VALE_CHURCH_SOUTHBOUND];
+            }
         }
 
         public Dictionary<Stop, TimeSpan> GetNeighbours(int stopId)

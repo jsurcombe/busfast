@@ -29,7 +29,9 @@ namespace BusFast.Wrappers.Journey
             foreach (var s in _ds.GetNeighbours(Stop.Id))
             {
                 var timeEstimate = (s.Value * 4) + TimeSpan.FromMinutes(2);
-                yield return new WalkEdge(at + timeEstimate, timeEstimate, new StopNode(s.Key, _ds));
+                if (timeEstimate.TotalMinutes < 0)
+                    throw new NotImplementedException();
+                    yield return new WalkEdge(at + timeEstimate, timeEstimate, new StopNode(s.Key, _ds));
             }
         }
 

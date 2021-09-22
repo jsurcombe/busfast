@@ -94,8 +94,17 @@ namespace BusFast.Scrape
 
             foreach (var service in services) // link stops (for navigation)
             {
+                var dayOffset = TimeSpan.Zero;
+
                 for (var i = 1; i < service.Stops.Count; i++)
+                {
                     service.Stops[i - 1].Next = service.Stops[i];
+                    
+                    if (service.Stops[i].Time + dayOffset < service.Stops[i - 1].Time)
+                        dayOffset += TimeSpan.FromDays(1);
+
+                    service.Stops[i].Time += dayOffset;
+                }
             }
 
             return services;

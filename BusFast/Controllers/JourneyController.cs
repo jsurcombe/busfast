@@ -41,7 +41,7 @@ namespace BusFast.Controllers
 
             unvisited.Enqueue(start, start.Priority);
 
-            var visited = new HashSet<Node>();
+            var visited = new Dictionary<Node, DateTime>(); // when we last visited this node
 
             while (true)
             {
@@ -51,20 +51,20 @@ namespace BusFast.Controllers
                 {
                     if (!unvisited.TryDequeue(out c))
                         yield break;
-                } while (visited.Contains(c.Node));
+                } while (visited.TryGetValue(c.Node, out var at) && at <= c.At); // places we already went
 
                 yield return c;
 
                 foreach (var e in c.Edges)
                 {
-                    if (visited.Contains(e.To))
+                    if (visited.TryGetValue(e.To, out var at) && at <= e.At)
                         continue; // already visited
 
                     var nextCursor = new Cursor(c, e);
                     unvisited.Enqueue(nextCursor, nextCursor.Priority);
                 }
 
-                visited.Add(c.Node);
+                visited[c.Node] = c.At;
             }
         }
     }

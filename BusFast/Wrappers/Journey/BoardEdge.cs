@@ -17,7 +17,7 @@ namespace BusFast.Wrappers.Journey
         public override string Describe()
         {
             var bound = _serviceStop.ServiceStop.Stop.Bound;
-            return $"Board the {(bound != null ? bound.ToLower() + " " : "")}route {_serviceStop.ServiceStop.Service.Route.Name} bus";
+            return $"Take the {(bound != null ? bound.ToLower() + " " : "")}route {_serviceStop.ServiceStop.Service.Route.Name} bus";
         }
     }
 }

@@ -27,6 +27,8 @@ namespace BusFast.Wrappers.Journey
             Start = previous.Start;
             Previous = previous;
             Edge = edge;
+            if (edge.Cost < 0f)
+                throw new NotImplementedException();
             Cost = previous.Cost + edge.Cost;
             Node = edge.To;
             At = edge.At;
