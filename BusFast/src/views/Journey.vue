@@ -8,10 +8,10 @@
         <location placeholder="going to" @input="setTo($event)"></location>
     </div>
     <div>
-        <input id="when-now" type="radio" value="now" v-model="when" @input="changedWhen()" />
+        <input id="when-now" type="radio" value="now" v-model="when" />
         <label for="when-now">now</label>
 
-        <input id="when-later" type="radio" value="later" v-model="when" @input="changedWhen()" />
+        <input id="when-later" type="radio" value="later" v-model="when" />
         <label for="when-later">later</label>
     </div>
     <div v-if="when == 'later'">
@@ -42,9 +42,20 @@
         fromCluster: ClusterItem | null = null;
         toCluster: ClusterItem | null = null;
 
-        when: 'now' | 'later' = 'now';
-        time: string | null = null;
+        get time(): string {
+            if (this._time == null)
+                this._time = this.timePart((new Date()).toISOString());
+
+            return this._time;
+        }
+
+        set time(value: string) {
+            this._time = value;
+        }
+
+        _time: string | null = null;
         day: string = 'today';
+        when: 'now' | 'later' = 'now';
 
         journey: Journey | null = null;
 
@@ -67,11 +78,6 @@
                     this.journey = response.data;
                 });
 
-        }
-
-        changedWhen(): string {
-            if (this.when == 'later')
-                this.time
         }
 
         timePart(dt: string): string {

@@ -40,6 +40,8 @@
                 update(to.query.q as string);
                 next();
             });
+
+            document.dispatchEvent(new Event("prerender-page-ready"));
         }
 
         unmounted() {

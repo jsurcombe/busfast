@@ -2,16 +2,10 @@ using BusFast.Models;
 using BusFast.Scrape;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace busfast
 {
@@ -27,8 +21,8 @@ namespace busfast
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "busfast", Version = "v1" });
@@ -43,7 +37,7 @@ namespace busfast
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:8080", "http://localhost:8081");
+                        builder.WithOrigins("http://localhost:8000", "http://localhost:8080", "http://localhost:8081");
                     });
             });
         }
