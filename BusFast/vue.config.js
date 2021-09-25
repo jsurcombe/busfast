@@ -26,6 +26,15 @@ module.exports = {
          }),
          // List of routes to prerender
          routes: ['/', '/clusters'],
+         postProcess(renderedRoute) {
+           // Remove /index.html from the output path if the dir name ends with a .html file extension.
+           // For example: /dist/dir/special.html/index.html -> /dist/dir/special.html
+           if (!renderedRoute.route.endsWith('/')) {
+             renderedRoute.outputPath = path.join(__dirname, 'dist', renderedRoute.route + ".html")
+           }
+
+           return renderedRoute
+         }
        })
      ]
    }
