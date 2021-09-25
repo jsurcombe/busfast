@@ -22,12 +22,6 @@
                 .then(response => {
                     this.stops = response.data;
                     document.dispatchEvent(new Event("prerender-page-ready"));
-                })
-                .catch(r => {
-
-                    window.console.log(" gettning /clusters failed");
-                    window.console.log(JSON.stringify(r));
-
                 });
         }
     }

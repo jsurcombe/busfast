@@ -7,6 +7,7 @@
     <div>
         <location placeholder="going to" @input="setTo($event)"></location>
     </div>
+    <!--
     <div>
         <input id="when-now" type="radio" value="now" v-model="when" />
         <label for="when-now">now</label>
@@ -15,10 +16,10 @@
         <label for="when-later">later</label>
     </div>
     <div v-if="when == 'later'">
-        <input type="text" v-model="time">
+        <input type="text" v-model="time" @input="setTime($event.target.value)">
         <input type="text" v-model="day">
     </div>
-
+    -->
     <div v-if="journey">
         <table class="journey">
             <tr v-for="(step, index) in journey.steps" :key="index">
