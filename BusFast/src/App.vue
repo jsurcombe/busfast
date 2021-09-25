@@ -3,6 +3,10 @@
         <router-link :to="{ name: 'Home' }">[Home]</router-link>
         <router-link :to="{ name: 'Clusters' }">[Stops]</router-link>
         <router-link :to="{ name: 'Journey' }">[Journey Planner]</router-link>
+
+        <div v-if="$route.name == 'Home'" style="margin-top: 10px">
+            <img src="@/assets/bus.png" style="width: 204px; height: 112px; image-rendering: crisp-edges; vertical-align:middle" />
+        </div>
     </div>
     <router-view />
 </template>
@@ -80,22 +84,21 @@
 
 
     a {
-        color: #42b983;
+        color: #8da;
     }
 
     #nav {
-        padding: 30px;
+        position: relative;
+        margin: 0;
+        padding: 10px;
+        background: #333;
+        margin-bottom: 10px;
     }
 
         #nav a {
-            color: #2c3e50;
             margin-left: 0.5em;
             margin-right: 0.5em;
         }
-
-            #nav a .router-link-exact-active {
-                color: #42b983;
-            }
 
     table {
         margin-left: auto;

@@ -1,6 +1,8 @@
 <template>
     <div>
-        <h1>BUS>>FAST</h1>
+        <h1 style="vertical-align: middle">
+            BUS>>FAST
+        </h1>
         <input v-model="stopQ" @input="changedQ($event.target.value)" placeholder="find a stop">
         <ul>
             <li v-for="stop in stops" :key="stop.id">
