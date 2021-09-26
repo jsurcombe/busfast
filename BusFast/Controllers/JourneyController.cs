@@ -24,9 +24,16 @@ namespace BusFast.Controllers
         }
 
         [HttpGet]
-        public Journey Get(string fromClusterId, string toClusterId)
+        public Journey Get(string fromClusterId, string toClusterId, string? atSpec)
         {
-            var start = new Cursor(Globals.GuernseyNow, new ClusterNode(_ds.GetCluster(fromClusterId), _ds));
+            DateTime at;
+
+            if (atSpec == null)
+                at = Globals.GuernseyNow;
+            else
+                at = Globals.GetTime(atSpec);
+
+            var start = new Cursor(at, new ClusterNode(_ds.GetCluster(fromClusterId), _ds));
 
             var toNode = new ClusterNode(_ds.GetCluster(toClusterId), _ds);
 

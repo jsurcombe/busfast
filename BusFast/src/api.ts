@@ -23,8 +23,12 @@ class Api {
     return http.get(`/services/${id}/stops`);
   }
 
-  getJourney(fromClusterId: string, toClusterId: string): Promise<AxiosResponse<Journey>> {
-    return http.get(`/journey`, { params: { fromClusterId: fromClusterId, toClusterId: toClusterId } });
+  getJourney(fromClusterId: string, toClusterId: string, atSpec: string | null): Promise<AxiosResponse<Journey>> {
+    return http.get(`/journey`, { params: { fromClusterId: fromClusterId, toClusterId: toClusterId, atSpec: atSpec } });
+  }
+
+  getNowInfo(): Promise<AxiosResponse<NowInfo>> {
+    return http.get(`/time`);
   }
 }
 
@@ -68,4 +72,9 @@ type Step = {
 
 export type Journey = {
   steps: Step[];
+}
+
+export type NowInfo = {
+  nowPlusOneMinute: string;
+  dayOfWeek: number;
 }

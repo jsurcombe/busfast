@@ -1,10 +1,8 @@
 ﻿<template>
-    <h1>
-        BUS>>SERVICE
-    </h1>
-    <div v-if="service">
+    <h1 v-if="service">
+        <vue-title :title="service.routeName + ': ' + service.description"></vue-title>
         Route {{ service.routeName }}: {{ service.description }}
-    </div>
+    </h1>
 
     <div v-if="serviceStops">
         <ul>

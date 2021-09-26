@@ -1,4 +1,5 @@
 ﻿<template>
+    <vue-title title="BUS>>STOPS"></vue-title>
     <div>
         <h1>BUS>>STOPS</h1>
 

@@ -1,4 +1,6 @@
 <template>
+    <vue-title title="BUS>>FAST"></vue-title>
+
     <div>
         <h1 style="vertical-align: middle">
             BUS>>FAST

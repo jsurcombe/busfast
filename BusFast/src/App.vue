@@ -4,8 +4,8 @@
         <router-link :to="{ name: 'Clusters' }">[Stops]</router-link>
         <router-link :to="{ name: 'Journey' }">[Journey Planner]</router-link>
 
-        <div v-if="$route.name == 'Home'" style="margin-top: 10px">
-            <img src="@/assets/bus.png" style="width: 204px; height: 112px; image-rendering: crisp-edges; vertical-align:middle" />
+        <div v-if="$route.name == 'Home'">
+            <img id="logo" src="@/assets/bus.png" />
         </div>
     </div>
     <router-view />
@@ -63,15 +63,28 @@
             color: black;
         }
 
+    #logo {
+        width: 204px;
+        height: 112px;
+        image-rendering: crisp-edges;
+        vertical-align: middle;
+        margin-top: 10px;
+    }
+
     body {
         font-size: 1.2em;
         background: black;
     }
 
-    input {
+    input, select {
         font-size: 1.2em;
         font-family: monospace;
         text-align: center;
+        border: outset 
+    }
+
+    select {
+        background-color: white;
     }
 
     #app {

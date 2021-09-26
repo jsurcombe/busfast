@@ -1,15 +1,14 @@
 ﻿<template>
-    <h1>
-        BUS>>STOP
-    </h1>
-    <div v-if="cluster">
+    <vue-title v-if="cluster" :title="cluster.name"></vue-title>
+
+    <h1 v-if="cluster">
         {{ cluster.name }}
-    </div>
+    </h1>
 
     <div v-if="upcomingServices">
         <ul>
             <li v-for="(ss, index) in upcomingServices" :key="index">
-                <div v-bind:class="{ highlight: highlight(ss) }" >
+                <div v-bind:class="{ highlight: highlight(ss) }">
                     <router-link :to="{ name: 'Service', params: { id: ss.service.id }, query: { stopId: ss.stop.id }}">{{ timePart(ss.at) }}: {{ss.service.routeName}} <span v-if="ss.stop.bound">{{ss.stop.bound}}</span></router-link>
                 </div>
                 <div>
