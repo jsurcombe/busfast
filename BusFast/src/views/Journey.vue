@@ -16,7 +16,7 @@
         <label for="when-later">later</label>
     </div>
     <div v-if="when == 'later' && nowInfo">
-        <input size="10" type="text" :value="time" @input="time = $event.target.value; getJourney();" >
+        <input size="10" type="text" inputmode="numeric" :value="time" @input="time = $event.target.value; getJourney();" >
         <select :value="day" @input="day = $event.target.value; getJourney()">
             <option v-for="(day, index) in days" :value="index" :key="index">{{ day }}</option>
         </select>
