@@ -16,7 +16,7 @@
         <label for="when-later">later</label>
     </div>
     <div v-if="when == 'later' && nowInfo">
-        <input size="10" type="text" :value="time" @input="time = $event.target.value; getJourney();" >
+        <input size="10" type="text" :value="time" @input="setTime($event.target.value)">{{ amPm }}
         <select :value="day" @input="day = $event.target.value; getJourney()">
             <option v-for="(day, index) in days" :value="index" :key="index">{{ day }}</option>
         </select>
@@ -81,6 +81,8 @@
         time: string | null = null;
         day: number = 0;
 
+        amPm: string | null = null;
+
         when: 'now' | 'later' = 'now';
 
         journey: Journey | null = null;
@@ -92,6 +94,11 @@
 
         setTo(e: ClusterItem) {
             this.toCluster = e;
+            this.getJourney();
+        }
+
+        setTime(v: string) {
+            this.time = v;
             this.getJourney();
         }
 
@@ -112,6 +119,16 @@
         }
 
         getJourney() {
+
+            if (this.time) {
+                const hourPart = this.time.split(':')[0];
+                const hour = parseInt(hourPart);
+
+                if (hour < 12)
+                    this.amPm = 'am';
+                else
+                    this.amPm = 'pm';
+            }
 
             if (!this.valid())
                 return;

@@ -80,7 +80,7 @@
         font-size: 1.2em;
         font-family: monospace;
         text-align: center;
-        border: outset 
+        border: outset
     }
 
     select {
@@ -94,7 +94,6 @@
         text-align: center;
         color: white;
     }
-
 
     a {
         color: #8da;
