@@ -51,44 +51,30 @@ namespace BusFast.Wrappers
 
         public IEnumerable<Occurrence> Occurrences(DateTime after)
         {
-            if (_serviceStop.Time >= after.TimeOfDay) // missed today's - go back a day
+            if (_serviceStop.Time >= after.TimeOfDay) // we will catch the first one
+            {
+                if (_serviceStop.Service.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    int i = 4;
+                }
                 after = after.AddDays(-1);
+            }
 
             after -= after.TimeOfDay;
             after += _serviceStop.Time;
 
             while (true)
             {
-                after = after.AddDays(DaysAdvance(after, _serviceStop.Service.Days));
+                after = after.AddDays(DaysAdvance(after, _serviceStop.Service.DayOfWeek));
                 yield return new Occurrence(_serviceStop, after);
             }
         }
 
-        private int DaysAdvance(DateTime dt, Days days)
+        private int DaysAdvance(DateTime dt, DayOfWeek day)
         {
-            // the number of days from dt until the next day within days
-            switch (days)
-            {
-                case Days.Friday:
-                    switch (dt.DayOfWeek)
-                    {
-                        case DayOfWeek.Friday:
-                            return 3;
-                        case DayOfWeek.Saturday:
-                            return 2;
-                        default:
-                            return 1;
-                    }
-
-                case Days.Saturday:
-                case Days.Sunday:
-
-                    return ((int)days + 6 - (int)dt.DayOfWeek) % 7 + 1;
-
-                default:
-                    throw new NotImplementedException();
-            }
+            return ((int)day + 6 - (int)dt.DayOfWeek) % 7 + 1;
         }
+
         public static IEnumerable<Occurrence> Occurrences(IEnumerable<ServiceStop> services, DateTime at)
         {
             // board the next bus from this stop

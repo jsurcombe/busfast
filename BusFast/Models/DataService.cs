@@ -29,9 +29,10 @@ namespace BusFast.Models
 
         public DataService(DataLoader dataLoader)
         {
-            _loadTask = dataLoader.LoadRoutes().ContinueWith(r =>
+            _loadTask = dataLoader.LoadData().ContinueWith(r =>
             {
-                var allServices = r.Result.SelectMany(rn => rn.Services);
+                var routes = Convert(r.Result);
+                var allServices = routes.SelectMany(rn => rn.Services);
 
                 _stops = allServices.SelectMany(svc => svc.Stops).Select(s => s.Stop).GroupBy(s => s.Id).Select(g => g.First()).ToArray();
 
@@ -72,7 +73,7 @@ namespace BusFast.Models
                 _servicesByStop = allServices.SelectMany(svc => svc.Stops).ToLookup(ss => ss.Stop.Id);
                 _serviceDictionary = allServices.ToDictionary(svc => svc.Id);
 
-                foreach (var route in r.Result)
+                foreach (var route in routes)
                 {
                     // find service returns
                     foreach (var svc in route.Services.Where(si => si.Direction == Direction.Outbound))
@@ -80,7 +81,7 @@ namespace BusFast.Models
                         var terminal = svc.Stops[svc.Stops.Count - 1];
 
                         svc.Return = route.Services.Where(si => si.Direction == Direction.Inbound
-                            && si.Days == svc.Days
+                            && si.DayOfWeek == svc.DayOfWeek
                             && si.Stops[0].Stop.Cluster == terminal.Stop.Cluster
                             && si.Stops[0].Time >= terminal.Time)
                             .FirstOrDefault();
@@ -115,6 +116,24 @@ namespace BusFast.Models
                 }));
 
             });
+        }
+
+        private Route[] Convert(Scrape.Data result)
+        {
+            // pre-processing
+            foreach (var t in result.Timetables)
+                foreach (var s in t.Value.Timetable)
+                    foreach (var tr in s.Value.Days)
+                        foreach (var tta in tr.Trips)
+                        {
+                            // if this trip goes after 6pm, then any pre-6am stop is the next day
+                            if (tta.Stops.Any(s => s.Departure_Time.CompareTo("18:00") > 0)) {
+                                foreach (var ss in tta.Stops.Where(s => s.Departure_Time.CompareTo("06:00") < 0))
+                                    ss.DaysOffset = 1;
+                            }
+                        }
+
+            return result.Timetables.Select(kvp => new Route(kvp.Key, kvp.Value)).ToArray();
         }
 
         private void FixStops(Service s)

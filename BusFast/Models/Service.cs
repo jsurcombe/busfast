@@ -12,22 +12,30 @@ namespace BusFast.Models
             Route = route;
         }
 
-        public Direction Direction { get; set; }
-        public Days Days { get; set; }
-        public List<ServiceStop> Stops { get; set; }
-        public Route Route { get; }
-        public string Id { get; set; }
-
-        public string Description
+        public Service(Route route, Direction direction, Scrape.Day day, Scrape.Trip trip, Dictionary<int, Stop> stops) : this(route)
         {
-            get
+            Route = route;
+            Direction = direction;
+            DayOfWeek = (DayOfWeek)day;
+            Id = $"{trip.Trip_Id}-{day}";
+
+            Stops = new();
+            ServiceStop? previous = null;
+
+            foreach (var s in trip.Stops.OrderBy(si => si.Time))
             {
-                if (Direction == Direction.Outbound)
-                    return Route.Description;
-                else // reverse the description
-                    return string.Join(" - ", Route.Description.Split('-').Select(s => s.Trim()).Reverse());
+                var ss = new ServiceStop(this, s, stops, previous);
+                Stops.Add(ss);
+                previous = ss;
             }
+
         }
+
+        public Direction Direction { get; }
+        public DayOfWeek DayOfWeek { get; }
+        public List<ServiceStop> Stops { get; }
+        public Route Route { get; }
+        public string Id { get; }
 
         public Service Return { get; internal set; }
     }

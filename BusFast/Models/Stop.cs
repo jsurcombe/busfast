@@ -7,6 +7,12 @@ namespace BusFast.Models
 {
     public class Stop
     {
+        public Stop(Scrape.Stop s)
+        {
+            Id = s.Stop_Id;
+            Name = s.Stop_Name;
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
 

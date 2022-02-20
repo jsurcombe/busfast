@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System.Net.Http;
 
 namespace busfast
 {
@@ -30,7 +31,7 @@ namespace busfast
 
             services.AddSingleton<DataService>();
             services.AddSingleton<DataLoader>();
-            services.AddSingleton<HTMLClient>();
+            services.AddHttpClient();
 
             services.AddCors(options =>
             {

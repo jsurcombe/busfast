@@ -12,7 +12,7 @@ namespace BusFast.Data
         {
             Id = service.Id;
             RouteName = service.Route.Name;
-            Description = service.Description;
+            Description = service.Route.Description;
         }
 
         public string Id { get; }
