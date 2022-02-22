@@ -18,9 +18,29 @@ namespace BusFast.Scrape
             _client = client;
         }
 
+        private string Location => Path.Combine(Path.GetTempPath(), "busfast");
+
         public async Task<Data> LoadData()
         {
-            var dataJSON = await _client.GetStringAsync("https://gsybus-admin.libertybus.je/cache/timetables/timetable_full.json");
+            Directory.CreateDirectory(Location);
+            var cacheLocation = Path.Combine(Location, "timetable_full.json");
+            string dataJSON;
+
+            if (File.Exists(cacheLocation) && (DateTime.UtcNow - File.GetLastWriteTimeUtc(cacheLocation)).TotalDays < 1.0)
+                dataJSON = File.ReadAllText(cacheLocation);
+            else
+            {
+                try
+                {
+                    dataJSON = await _client.GetStringAsync("https://gsybus-admin.libertybus.je/cache/timetables/timetable_full.json");
+                    File.WriteAllText(cacheLocation, dataJSON);
+                }
+                catch (Exception)
+                {
+                    // fall back to last copy
+                    dataJSON = File.ReadAllText(cacheLocation);
+                }
+            }
             return JsonSerializer.Deserialize<Data>(dataJSON, new JsonSerializerOptions(JsonSerializerDefaults.Web));
         }
 
