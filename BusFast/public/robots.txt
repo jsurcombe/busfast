@@ -1,0 +1,6 @@
+Sitemap: https://busfa.st/sitemap.xml
+
+User-agent: *
+Allow: /$
+Allow: /clusters$
+Disallow: /
