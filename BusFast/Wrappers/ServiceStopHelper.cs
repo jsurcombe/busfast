@@ -52,13 +52,7 @@ namespace BusFast.Wrappers
         public IEnumerable<Occurrence> Occurrences(DateTime after)
         {
             if (_serviceStop.Time >= after.TimeOfDay) // we will catch the first one
-            {
-                if (_serviceStop.Service.DayOfWeek == DayOfWeek.Sunday)
-                {
-                    int i = 4;
-                }
                 after = after.AddDays(-1);
-            }
 
             after -= after.TimeOfDay;
             after += _serviceStop.Time;
