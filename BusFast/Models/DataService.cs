@@ -120,8 +120,10 @@ namespace BusFast.Models
 
         private Route[] Convert(Scrape.Data result)
         {
+            var filteredTimetables = result.Timetables.Where(ti => !ti.Key.StartsWith("Z")); // remove school buses            
+
             // pre-processing
-            foreach (var t in result.Timetables)
+            foreach (var t in filteredTimetables)
                 foreach (var s in t.Value.Timetable)
                     foreach (var tr in s.Value.Days)
                         foreach (var tta in tr.Trips)
@@ -133,7 +135,7 @@ namespace BusFast.Models
                             }
                         }
 
-            return result.Timetables.Select(kvp => new Route(kvp.Key, kvp.Value)).ToArray();
+            return filteredTimetables.Select(kvp => new Route(kvp.Key, kvp.Value)).ToArray();
         }
 
         private void FixStops(Service s)
@@ -152,7 +154,10 @@ namespace BusFast.Models
 
         public Dictionary<Stop, TimeSpan> GetNeighbours(long stopId)
         {
-            return _stopPairs[stopId];
+            if (_stopPairs.TryGetValue(stopId, out var result))
+                return result;
+            else
+                return new();
         }
 
         private void FixStopName(Stop s)
