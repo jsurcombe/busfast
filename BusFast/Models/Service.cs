@@ -12,7 +12,7 @@ namespace BusFast.Models
             Route = route;
         }
 
-        public Service(Route route, Direction direction, Scrape.Day day, Scrape.Trip trip, Dictionary<int, Stop> stops) : this(route)
+        public Service(Route route, Direction direction, Scrape.Day day, Scrape.Trip trip, Dictionary<long, Stop> stops) : this(route)
         {
             Route = route;
             Direction = direction;

@@ -12,11 +12,11 @@ namespace BusFast.Models
     {
         private readonly Task _loadTask;
         private Stop[] _stops;
-        private Dictionary<int, Stop> _stopDictionary;
+        private Dictionary<long, Stop> _stopDictionary;
         private ILookup<string, ServiceStop> _servicesByCluster;
-        private ILookup<int, ServiceStop> _servicesByStop;
+        private ILookup<long, ServiceStop> _servicesByStop;
 
-        internal IEnumerable<ServiceStop> GetServicesAtStop(int id)
+        internal IEnumerable<ServiceStop> GetServicesAtStop(long id)
         {
             _loadTask.Wait();
             return _servicesByStop[id];
@@ -25,7 +25,7 @@ namespace BusFast.Models
         private Dictionary<string, Service> _serviceDictionary;
         private Cluster[] _clusters;
         private Dictionary<string, Cluster> _clusterDictionary;
-        private Dictionary<int, Dictionary<Stop, TimeSpan>> _stopPairs;
+        private Dictionary<long, Dictionary<Stop, TimeSpan>> _stopPairs;
 
         public DataService(DataLoader dataLoader)
         {
@@ -88,7 +88,7 @@ namespace BusFast.Models
                     }
                 }
 
-                var stopPairs = new Dictionary<int, Dictionary<Stop, List<TimeSpan>>>();
+                var stopPairs = new Dictionary<long, Dictionary<Stop, List<TimeSpan>>>();
 
                 // build walking routes
                 foreach (var s in allServices)
@@ -138,9 +138,9 @@ namespace BusFast.Models
 
         private void FixStops(Service s)
         {
-            var VALE_KIOSK_NORTHBOUND = 890000691;
-            var TRINITY_SQUARE_SOUTHBOUND = 890000603;
-            var VALE_CHURCH_SOUTHBOUND = 890000499;
+            var VALE_KIOSK_NORTHBOUND = 890000691L;
+            var TRINITY_SQUARE_SOUTHBOUND = 890000603L;
+            var VALE_CHURCH_SOUTHBOUND = 890000499L;
 
             // fix bug in route 13
             for (var i = 1; i < s.Stops.Count; i++)
@@ -150,7 +150,7 @@ namespace BusFast.Models
             }
         }
 
-        public Dictionary<Stop, TimeSpan> GetNeighbours(int stopId)
+        public Dictionary<Stop, TimeSpan> GetNeighbours(long stopId)
         {
             return _stopPairs[stopId];
         }
@@ -184,7 +184,7 @@ namespace BusFast.Models
 
         internal Cluster GetCluster(string id) { _loadTask.Wait(); return _clusterDictionary[id]; }
 
-        internal Stop GetStop(int id) { _loadTask.Wait(); return _stopDictionary[id]; }
+        internal Stop GetStop(long id) { _loadTask.Wait(); return _stopDictionary[id]; }
 
         public Stop[] Stops
         {

@@ -13,7 +13,7 @@ namespace BusFast.Data
             Time = serviceStop.Time;
         }
 
-        public int StopId { get; }
+        public long StopId { get; }
         public ClusterItem Cluster { get; }
         [JsonConverter(typeof(TimeConverter))]
         public TimeSpan Time { get; }

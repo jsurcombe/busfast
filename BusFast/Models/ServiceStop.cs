@@ -7,7 +7,7 @@ namespace BusFast.Models
 {
     public class ServiceStop
     {
-        public ServiceStop(Service service, Scrape.TripStop s, Dictionary<int, Stop> stops, ServiceStop? previous)
+        public ServiceStop(Service service, Scrape.TripStop s, Dictionary<long, Stop> stops, ServiceStop? previous)
         {
             Service = service;
             Stop = stops[s.Stop_Id];

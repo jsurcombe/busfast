@@ -13,7 +13,7 @@ namespace BusFast.Models
             Name = s.Stop_Name;
         }
 
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
 
         public Cluster Cluster { get; set; }

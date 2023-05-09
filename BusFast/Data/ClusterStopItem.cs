@@ -14,7 +14,7 @@ namespace BusFast.Data
             Bound = s.Bound;
         }
 
-        public int Id { get; }
+        public long Id { get; }
         public string Bound { get; }
     }
 }

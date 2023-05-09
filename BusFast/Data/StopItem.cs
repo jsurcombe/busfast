@@ -14,7 +14,7 @@ namespace BusFast.Data
             Name = stop.Name;
         }
 
-        public int Id { get; }
+        public long Id { get; }
         public string Name { get; }
     }
 }
